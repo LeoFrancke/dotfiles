@@ -13,7 +13,7 @@ if [[ "$TERM" != "linux" ]]; then
     # TTY uses TERM=linux
     ZSH_THEME="powerlevel10k/powerlevel10k"
 else
-    ZSH_THEME="robbyrussell"
+    ZSH_THEME="ys"
 fi
 
 # Set list of themes to pick from when loading at random

@@ -1,6 +1,9 @@
 # TO DO
 
-> automate installation of zsh plugins.
 > install.sh:
+    check package and install things accordingly.
     folders need to be created, if necessary.
+    automate installation of zsh plugins.
+    
+> tmux
 

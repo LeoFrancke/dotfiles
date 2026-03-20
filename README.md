@@ -7,6 +7,5 @@
 
 
 
-TO-DO: tmux
 
 
