@@ -60,7 +60,7 @@ highlight clear LineNr
 highlight LineNr guifg=#20222b
 
 " Cursor Line style
-highlight CursorLine guibg=#121317
+highlight CursorLine guibg=#121317 ctermbg=15 cterm=bold term=bold
 highlight CursorLineNr guibg=#121317 gui=bold cterm=bold "guifg=#7dff7d
 
 " Search Highlighting
