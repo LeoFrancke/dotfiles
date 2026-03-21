@@ -8,6 +8,10 @@
 
 ## TO DO list
 
+* zsh new plugins: 
+    colored-man-pages, gitfast, rust
+    
+
 * install.sh:
     - check linux package and install things accordingly.
     - folders need to be created, if necessary.

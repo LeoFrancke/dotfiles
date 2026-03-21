@@ -118,7 +118,12 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # alias py="python3"
-alias cat='bat'
+if command -v bat &>/dev/null; then
+    alias cat='bat'
+elif command -v batcat &>/dev/null; then
+    # ubuntu's binary is batcat
+    alias cat='batcat'
+fi
 
 if [[ "$TERM" != "linux" ]]; then
     alias ls='lsd'
@@ -131,10 +136,10 @@ else
 fi
 
 
-alias vimrc='vim ~/.vimrc'
-alias wez='vim ~/.wezterm.lua'
-alias zshrc='vim ~/.zshrc'
-alias zh='vim ~/.zsh_history'
+alias vimrc='$EDITOR ~/.vimrc'
+alias wez='$EDITOR ~/.wezterm.lua'
+alias zshrc='$EDITOR ~/.zshrc'
+alias zh='$EDITOR ~/.zsh_history'
 
 # files browsing
 alias ..='cd ..'
@@ -184,23 +189,9 @@ bindkey '^o' clear-screen
 
 
 
-
-# Man pages ~ color for readability
-export MANPAGER="less -R"
-export PAGER="less -R"
-export LESS="-R"
-export LESS_TERMCAP_mb=$'\E[1;31m'
-export LESS_TERMCAP_md=$'\E[1;36m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[1;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[1;32m'
-
-
-
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
