@@ -17,5 +17,6 @@ ln -sf $DOTFILES/vim/config/plugins.vim         ~/.vim/config/plugins.vim
 ln -sf $DOTFILES/vim/config/statusline.vim      ~/.vim/config/statusline.vim
 
 echo "Dotfiles linked!"
-echo 'To verify it worked: \n>$ ls -la ~ | grep "\->"]'
+echo 'To verify it worked: $ ls -la ~ | grep "\->"]'
+echo "Don't forget to install Vim Plugins. Inside Vim: :PlugInstall"
 

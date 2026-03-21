@@ -1,5 +1,9 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -10,9 +14,9 @@ export ZSH="$HOME/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 
 if [[ "$TERM" != "linux" ]]; then
-    # TTY uses TERM=linux
     ZSH_THEME="powerlevel10k/powerlevel10k"
 else
+    # TTY uses TERM=linux
     ZSH_THEME="ys"
 fi
 
@@ -114,17 +118,29 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # alias py="python3"
-alias cat="bat"
-alias vimrc="vim ~/.vimrc"
-alias wez="vim ~/.wezterm.lua"
-alias zshrc="vim ~/.zshrc"
-alias zh="vim ~/.zsh_history"
+alias cat='bat'
+
+if [[ "$TERM" != "linux" ]]; then
+    alias ls='lsd'
+    alias la='lsd -lah'
+    alias lt='lsd --tree'
+else
+    # TTY doesn't support lsd/nerd-fonts
+    alias la='ls -lah'
+    alias lt='ls --tree'
+fi
+
+
+alias vimrc='vim ~/.vimrc'
+alias wez='vim ~/.wezterm.lua'
+alias zshrc='vim ~/.zshrc'
+alias zh='vim ~/.zsh_history'
 
 # files browsing
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
 # activate virtual env. for python:
 alias venv="source ~/pyvenv/bin/activate"
@@ -185,3 +201,6 @@ export LESS_TERMCAP_us=$'\E[1;32m'
 
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
