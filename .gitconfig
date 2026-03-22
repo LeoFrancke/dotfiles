@@ -1,0 +1,9 @@
+[user]
+	name = Leandro Francke
+	email = 219414135+leofrancke@users.noreply.github.com
+[credential]
+	helper = store
+[core]
+	editor = vim
+[init]
+	defaultBranch = main
