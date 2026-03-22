@@ -10,8 +10,8 @@
 
 * install.sh:
     - xdg-dirs: verify if ubuntu supports it.
-    - add .p10k.zsh
-    
+    - p10k: penguin icon / git icon
+
 * tmux
 
 
