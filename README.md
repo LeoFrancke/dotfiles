@@ -10,7 +10,6 @@
 
 * install.sh:
     - xdg-dirs: verify if ubuntu supports it.
-    - p10k: penguin icon / git icon
 
 * tmux
 

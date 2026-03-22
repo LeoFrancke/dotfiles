@@ -39,9 +39,9 @@ echo "Done. File system ready."
 # 2. --- Package installation ---
 # Detect distro and use the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed zsh git curl vim wezterm
+    sudo pacman -S --needed zsh git curl vim wezterm bat lsd imv
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl vim
+    sudo apt update && sudo apt install -y zsh git curl vim bat
 fi
 
 # Update shell to zsh
@@ -69,9 +69,9 @@ echo "Done! Run: source ~/.zshrc"
 
 # 3. --- Dotfiles config ---
 DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
-# mkdir -pv "$DOTFILES/vim"
-# mkdir -pv "$DOTFILES/vim/config"
-# mkdir -pv "$DOTFILES/vim/colors"
+mkdir -pv "$DOTFILES/vim"
+mkdir -pv "$DOTFILES/vim/config"
+mkdir -pv "$DOTFILES/vim/colors"
 
 # symlink of main dotfiles
 ln -sfn "$DOTFILES/vim/vimrc.vim"   ~/.vimrc

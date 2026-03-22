@@ -21,7 +21,7 @@ local config = {
     -- background = "#000000"
     window_background_opacity = 0.95,
     window_decorations = "NONE",
-    font_size = 13.0,
+    font_size = 14.0,
     font = wezterm.font_with_fallback({
         { 
             family = "Fira Code", weight = 450,
