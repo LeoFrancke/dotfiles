@@ -3,7 +3,7 @@ set -e # exit on error
 
 # Steps:
 # 1. File system
-# 2. Install packages
+# 2. Install packages (pacman or apt)
 # 3. Dotfiles config
 
 
@@ -26,31 +26,43 @@ cat > "$HOME/.config/user-dirs.dirs" <<EOF
 XDG_DESKTOP_DIR="$HOME/Desktop"
 XDG_DOWNLOAD_DIR="$HOME/Downloads"
 XDG_DOCUMENTS_DIR="$HOME/30_personal/1_documents"
-XDG_PICTURES_DIR="$HOME/30_personal/4_photos"
+XDG_PICTURES_DIR="$HOME/30_personal/5_screenshots"
 XDG_MUSIC_DIR="$HOME/30_personal/7_music"
 XDG_TEMPLATES_DIR="$HOME"
 XDG_PUBLICSHARE_DIR="$HOME"
 EOF
 
-xdg-user-dirs-update #### NEED VERIFICATION: does it work on ubuntu?
 echo "Done. File system ready."
 
 
 # 2. --- Package installation ---
 # Detect distro and use the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed zsh git curl vim wezterm bat lsd imv
+    sudo pacman -S --needed zsh git curl vim wezterm bat lsd imv xdg-user-dirs
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl vim bat
+    sudo apt update && sudo apt install -y zsh git curl vim bat xdg-user-dirs
 fi
 
+# update default user dirs
+xdg-user-dirs-update
+
 # Update shell to zsh
-chsh -s $(which zsh)
+if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
+    chsh -s $(which zsh)
+fi
+
 
 # --- Oh My Zsh ---
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
+
+# --- Powerlevel10k ---
+if [[ "$TERM" != "linux" ]] && [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+        "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+fi
+
 
 # --- ZSH plugins ---
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
@@ -69,9 +81,8 @@ echo "Done! Run: source ~/.zshrc"
 
 # 3. --- Dotfiles config ---
 DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
-mkdir -pv "$DOTFILES/vim"
-mkdir -pv "$DOTFILES/vim/config"
-mkdir -pv "$DOTFILES/vim/colors"
+mkdir -pv "$HOME/.vim/config"
+mkdir -pv "$HOME/.vim/colors"
 
 # symlink of main dotfiles
 ln -sfn "$DOTFILES/vim/vimrc.vim"   ~/.vimrc
