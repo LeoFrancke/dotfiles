@@ -16,7 +16,6 @@ let mapleader = " "
 " Spellcheck off by default, except txt and md. Toggle hotkey: <leader>s
 set spelllang=en_us,pt_br,ru
 set spelloptions=camel  " CamelCased DifferntWords
-" set nospell
 autocmd FileType markdown,text setlocal spell
 
 " Visual tweaks
@@ -24,9 +23,7 @@ syntax on           " Syntax highlighting
 set cursorline      " Highlight current line
 set number          " Show line numbers
 set scrolloff=5     " keeps x lines visible while moving
-" set sidescrolloff=5 " same but horizontally / useless if wrapping is ON
 set signcolumn=yes  " Shows the signColumn on the left (errors, git marks, etc)
-" set cursorlineopt=number 
 set relativenumber  " Relative line numbers
 " Relative number on Normal mode / Absolute number on Insert mode
 augroup numbertoggle
