@@ -12,7 +12,6 @@ mkdir -pv \
     "$HOME/10_projects/leofrancke" \
     "$HOME/20_foundations" \
     "$HOME/30_personal/1_documents" \
-    "$HOME/30_personal/4_photos" \
     "$HOME/30_personal/5_screenshots" \
     "$HOME/30_personal/7_music" \
     "$HOME/40_professional" \
@@ -51,7 +50,6 @@ if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
     chsh -s $(which zsh)
 fi
 
-
 # --- Oh My Zsh ---
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -62,7 +60,6 @@ if [[ "$TERM" != "linux" ]] && [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/th
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
         "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 fi
-
 
 # --- ZSH plugins ---
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
@@ -76,13 +73,14 @@ ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ] && \
     git clone https://github.com/zsh-users/zsh-completions "$ZSH_CUSTOM/plugins/zsh-completions"
 
-echo "Done! Run: source ~/.zshrc"
+echo "Zsh plugins installed. Run: source ~/.zshrc"
 
 
 # 3. --- Dotfiles config ---
 DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 mkdir -pv "$HOME/.vim/config"
 mkdir -pv "$HOME/.vim/colors"
+mkdir -pv "$HOME/.vim/spell"
 
 # symlink of main dotfiles
 ln -sfn "$DOTFILES/vim/vimrc.vim"   ~/.vimrc
@@ -91,9 +89,10 @@ ln -sfn "$DOTFILES/.gitconfig"      ~/.gitconfig
 ln -sfn "$DOTFILES/.wezterm.lua"    ~/.wezterm.lua
 ln -sfn "$DOTFILES/.p10k.zsh"       ~/.p10k.zsh
 
-# vim plug install
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# vim plug install, if not already installed
+[ ! -f ~/.vim/autoload/plug.vim ] && \
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # symlink of vim files
 ln -sfn "$DOTFILES/vim/colors/modifications.vim"   ~/.vim/colors/modifications.vim
@@ -101,6 +100,7 @@ ln -sfn "$DOTFILES/vim/config/mappings.vim"        ~/.vim/config/mappings.vim
 ln -sfn "$DOTFILES/vim/config/persistent_undo.vim" ~/.vim/config/persistent_undo.vim
 ln -sfn "$DOTFILES/vim/config/plugins.vim"         ~/.vim/config/plugins.vim
 ln -sfn "$DOTFILES/vim/config/statusline.vim"      ~/.vim/config/statusline.vim
+ln -sfn "$DOTFILES/vim/spell/en.utf-8.add"         ~/.vim/spell/en.utf-8.add
 
 echo "Dotfiles linked!"
 echo 'To verify the symlinks worked: $ ls -la ~ | grep "\->"'

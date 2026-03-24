@@ -8,9 +8,7 @@
 
 ## TO DO list
 
-* install.sh:
-    - xdg-dirs: verify if ubuntu supports it.
-
+* add Spelling added words
 * tmux
 
 

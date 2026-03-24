@@ -3,6 +3,8 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
 "Plug 'vim-python/python-syntax'      " Python syntax
 Plug 'rust-lang/rust.vim'            " Rust support
