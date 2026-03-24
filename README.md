@@ -8,7 +8,8 @@
 
 ## TO DO list
 
-* add Spelling added words
+* add Spelling files
+* add retrolegends theme
 * tmux
 
 
