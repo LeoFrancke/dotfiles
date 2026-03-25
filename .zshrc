@@ -12,7 +12,6 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-
 if [[ "$TERM" != "linux" ]]; then
     ZSH_THEME="powerlevel10k/powerlevel10k"
 else
@@ -48,7 +47,7 @@ zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 # DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -105,6 +104,9 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='nvim'
 # fi
+export EDITOR='vim'
+export VISUAL='vim'
+
 
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
@@ -116,33 +118,14 @@ source $ZSH/oh-my-zsh.sh
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-# alias py="python3"
-if command -v bat &>/dev/null; then
-    alias cat='bat'
-elif command -v batcat &>/dev/null; then
-    # ubuntu's binary is batcat
-    alias cat='batcat'
-fi
-
-if [[ "$TERM" != "linux" ]]; then
-    alias ls='lsd'
-    alias la='lsd -lah'
-    alias lt='lsd --tree'
-else
-    # TTY doesn't support lsd/nerd-fonts
-    alias la='ls -lah'
-    alias lt='ls --tree'
-fi
-
-
 alias vimrc='$EDITOR ~/.vimrc'
 alias wez='$EDITOR ~/.wezterm.lua'
 alias zshrc='$EDITOR ~/.zshrc'
 alias zh='$EDITOR ~/.zsh_history'
+
+alias md='mkdir -pv'
+alias rd='rmdir -v' # only empty dirs
+alias rm='rm -Iv' # interactive + verbose
 
 # files browsing
 alias ..='cd ..'
@@ -150,11 +133,28 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
+# ubuntu's binary is batcat
+if command -v bat &>/dev/null; then
+    alias cat='bat'
+elif command -v batcat &>/dev/null; then
+    alias cat='batcat'
+fi
+
+if [[ "$TERM" != "linux" ]]; then
+    alias ls='lsd'
+    alias la='lsd -lAh --sort=time --reverse --total-size --header'
+    alias lt='lsd --tree --depth 2'
+else
+    # TTY doesn't support lsd/nerd-fonts
+    alias la='ls -lAh --sort=time --reverse --color=tty'
+fi
+
 # activate virtual env. for python:
 alias venv="source ~/pyvenv/bin/activate"
 
 alias zen='zen-browser'
 alias img='imv'          # or 'imv -f' for fullscreen
+
 
 # highlight style
 ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
@@ -164,10 +164,6 @@ ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
 # vim mode
 # bindkey -v
 
-
-# Set editor to Vim
-export EDITOR='vim'
-export VISUAL='vim'
 
 # Enable command-line editing in Vim
 autoload -U edit-command-line
