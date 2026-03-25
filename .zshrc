@@ -171,6 +171,7 @@ zle -N edit-command-line
 bindkey '^v' edit-command-line  # Ctrl + v to edit command in Vim
 
 
+# --- key-bindings ---
 # Dvorak-friendly navigation (mimicking custom Vim htsn)
 bindkey '^h' backward-char       # Ctrl + h (Dvorak h, QWERTY j) for left
 bindkey '^t' down-history        # Ctrl + t (Dvorak t, QWERTY k) for down (next history)
@@ -178,12 +179,13 @@ bindkey '^n' up-history          # Ctrl + n (Dvorak n, QWERTY l) for up (previou
 bindkey '^s' forward-char        # Ctrl + s (Dvorak s, QWERTY semicolon) for right
 
 # Additional useful bindings
+# bindkey '^H' backward-kill-word # default: Ctrl+W to delete a word
 bindkey '^a' beginning-of-line   # Ctrl + a (Dvorak a, QWERTY a) for start of line
 bindkey '^e' end-of-line         # Ctrl + e (Dvorak e, QWERTY e) for end of line
 bindkey '^r' history-incremental-search-backward  # Ctrl + r (Dvorak r, QWERTY r) for history search backward
 bindkey '^l' history-incremental-search-forward   # Ctrl + l (Dvorak l, QWERTY n) for history search forward
 
-# Optional: Clear screen (Dvorak o, QWERTY s)
+# Clear screen (Dvorak o, QWERTY s)
 bindkey '^o' clear-screen
 
 
