@@ -48,6 +48,8 @@ xdg-user-dirs-update
 # Update shell to zsh
 if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
     chsh -s $(which zsh)
+else
+    echo "Shell is already Zsh."
 fi
 
 # --- Oh My Zsh ---

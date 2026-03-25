@@ -84,7 +84,11 @@ set ttimeoutlen=50
 source ~/.vim/config/plugins.vim  " Before colorscheme
 
 " Theme & True color support
-set termguicolors
+if $TERM !=# "linux"
+    " only if not TTY
+    set termguicolors
+endif
+
 colorscheme retrolegends
 source ~/.vim/colors/modifications.vim  " Fine-tuning
 
