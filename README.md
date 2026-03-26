@@ -13,7 +13,7 @@
     Or manually trigger the download:
     :runtime spell/cleanadd.vim
 
-* add retrolegends theme
+* add retrolegends theme (on laptop)
 * tmux
 
 

@@ -44,6 +44,7 @@ local config = {
             },
         },
         -- Fallback font
+        "Symbols Nerd Font Mono", -- icons
         "Noto Color Emoji",
     }),
 

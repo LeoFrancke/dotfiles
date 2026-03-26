@@ -60,7 +60,11 @@ highlight clear LineNr
 highlight LineNr guifg=#20222b
 
 " Cursor Line style
-highlight CursorLine guibg=#121317 ctermbg=7 cterm=reverse term=reverse
+highlight CursorLine guibg=#121317
+if $TERM ==# "linux"
+    " only on TTY
+    highlight CursorLine cterm=reverse ctermbg=8
+endif
 highlight CursorLineNr guibg=#121317 gui=bold cterm=bold "guifg=#7dff7d
 
 " Search Highlighting
