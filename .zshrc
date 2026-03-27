@@ -140,20 +140,24 @@ fi
 # if not TTY
 if [[ "$TERM" != "linux" ]]; then
     alias ls='lsd'
-    alias lt='lsd --tree --depth 2'
+    alias lst='lsd --tree --depth 2'
     # alias la='lsd -lAh --sort=time --reverse --total-size --header --ignore-glob=".local" --ignore-glob=".cache"'
+    #
+    # if in ~ (home), then ignore some dirs and echo msg
     function lsd_long_all_human_readable() {
-        lsd -lAh --sort=time --reverse --total-size --header \
-            --date '+%Y %b %d %H:%M' \
         if [[ "$PWD" == "$HOME" ]]; then
-            --ignore-glob=".local" --ignore-glob=".cache" \
-            --ignore-glob=".zen" --ignore-glob=".vscode"
-        fi
-        # if in ~ (home), then print
-        if [[ "$PWD" == "$HOME" ]]; then 
+            lsd -lAh --sort=time --reverse --total-size --header \
+                --date '+%Y %b %d %H:%M' \
+                --ignore-glob=".local" --ignore-glob=".cache" \
+                --ignore-glob=".zen" --ignore-glob=".vscode"
+
             echo "\n  (hidden dirs: .local .cache .zen .vscode)"
+        else
+            lsd -lAh --sort=time --reverse --total-size --header \
+                --date '+%Y %b %d %H:%M'
         fi
     }
+
     alias la='lsd_long_all_human_readable'
 else
     # TTY doesn't support lsd/nerd-fonts, so use ls
