@@ -40,13 +40,15 @@ echo "File system ready."
 # 2. --- Package installation ---
 # Use the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed zsh git curl vim wezterm bat lsd imv xdg-user-dirs
+    sudo pacman -S --needed zsh git curl gvim wezterm bat lsd imv xdg-user-dirs
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl vim bat xdg-user-dirs
+    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs
 
     # If using Ubuntu in a GUI, then lsd can be used.
     if [[ "$TERM" != "linux" ]]; then
-        sudo apt install lsd imv
+        sudo apt install lsd imv gvim
+    else
+        sudo apt install vim
     fi
 fi
 
