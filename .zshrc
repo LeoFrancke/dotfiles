@@ -80,13 +80,10 @@ HIST_STAMPS="yyyy-mm-dd"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-    git 
-    gitfast
-    zsh-autosuggestions 
-    zsh-completions 
-    zsh-syntax-highlighting
+    git gitfast
+    zsh-autosuggestions zsh-completions zsh-syntax-highlighting
     colored-man-pages
-    rust
+    # rust
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -127,7 +124,7 @@ alias md='mkdir -pv'
 alias rd='rmdir -v' # only empty dirs
 alias rm='rm -Iv' # interactive + verbose
 
-# files browsing
+# file browsing
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -140,17 +137,31 @@ elif command -v batcat &>/dev/null; then
     alias cat='batcat'
 fi
 
+# if not TTY
 if [[ "$TERM" != "linux" ]]; then
     alias ls='lsd'
-    alias la='lsd -lAh --sort=time --reverse --total-size --header'
     alias lt='lsd --tree --depth 2'
+    # alias la='lsd -lAh --sort=time --reverse --total-size --header --ignore-glob=".local" --ignore-glob=".cache"'
+    function lsd_long_all_human_readable() {
+        lsd -lAh --sort=time --reverse --total-size --header \
+            --date '+%Y %b %d %H:%M' \
+        if [[ "$PWD" == "$HOME" ]]; then
+            --ignore-glob=".local" --ignore-glob=".cache" \
+            --ignore-glob=".zen" --ignore-glob=".vscode"
+        fi
+        # if in ~ (home), then print
+        if [[ "$PWD" == "$HOME" ]]; then 
+            echo "\n  (hidden dirs: .local .cache .zen .vscode)"
+        fi
+    }
+    alias la='lsd_long_all_human_readable'
 else
-    # TTY doesn't support lsd/nerd-fonts
+    # TTY doesn't support lsd/nerd-fonts, so use ls
     alias la='ls -lAh --sort=time --reverse --color=tty'
 fi
 
 # activate virtual env. for python:
-alias venv="source ~/pyvenv/bin/activate"
+# alias venv="source ~/pyvenv/bin/activate"
 
 alias zen='zen-browser'
 alias img='imv'          # or 'imv -f' for fullscreen

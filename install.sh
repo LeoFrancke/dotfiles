@@ -20,7 +20,7 @@ mkdir -pv \
     "$HOME/Desktop" \
     "$HOME/Downloads"
 
-# XDG user dirs
+# XDG default directories
 cat > "$HOME/.config/user-dirs.dirs" <<EOF
 XDG_DESKTOP_DIR="$HOME/Desktop"
 XDG_DOWNLOAD_DIR="$HOME/Downloads"
@@ -31,19 +31,24 @@ XDG_TEMPLATES_DIR="$HOME"
 XDG_PUBLICSHARE_DIR="$HOME"
 EOF
 
-echo "Done. File system ready."
+# update default user dirs
+xdg-user-dirs-update
+
+echo "File system ready."
 
 
 # 2. --- Package installation ---
-# Detect distro and use the right package manager
+# Use the right package manager
 if command -v pacman &>/dev/null; then
     sudo pacman -S --needed zsh git curl vim wezterm bat lsd imv xdg-user-dirs
 elif command -v apt &>/dev/null; then
     sudo apt update && sudo apt install -y zsh git curl vim bat xdg-user-dirs
-fi
 
-# update default user dirs
-xdg-user-dirs-update
+    # If using Ubuntu in a GUI, then lsd can be used.
+    if [[ "$TERM" != "linux" ]]; then
+        sudo apt install lsd imv
+    fi
+fi
 
 # Update shell to zsh
 if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
@@ -67,13 +72,13 @@ fi
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ] && \
-    git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ] && \
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+    git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
 
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ] && \
-    git clone https://github.com/zsh-users/zsh-completions "$ZSH_CUSTOM/plugins/zsh-completions"
+    git clone --depth=1 https://github.com/zsh-users/zsh-completions "$ZSH_CUSTOM/plugins/zsh-completions"
 
 echo "Zsh plugins installed. Run: source ~/.zshrc"
 
