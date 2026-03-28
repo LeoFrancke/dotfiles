@@ -88,6 +88,10 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# Remove bold from executable files / dirs are still bold.
+LS_COLORS="${LS_COLORS}:ex=32"
+
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -130,6 +134,9 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
+# activate virtual env. for python:
+# alias venv="source ~/pyvenv/bin/activate"
+
 # ubuntu's binary is batcat
 if command -v bat &>/dev/null; then
     alias cat='bat'
@@ -141,8 +148,7 @@ fi
 if [[ "$TERM" != "linux" ]]; then
     alias ls='lsd'
     alias lst='lsd --tree --depth 2'
-    # alias la='lsd -lAh --sort=time --reverse --total-size --header --ignore-glob=".local" --ignore-glob=".cache"'
-    #
+
     # if in ~ (home), then ignore some dirs and echo msg
     function lsd_long_all_human_readable() {
         if [[ "$PWD" == "$HOME" ]]; then
@@ -158,17 +164,16 @@ if [[ "$TERM" != "linux" ]]; then
         fi
     }
 
+    unalias la 2>/dev/null # avoids errors
     alias la='lsd_long_all_human_readable'
+
+    alias img='imv'          # or 'imv -f' for fullscreen
+    alias zen='zen-browser'
 else
     # TTY doesn't support lsd/nerd-fonts, so use ls
     alias la='ls -lAh --sort=time --reverse --color=tty'
 fi
 
-# activate virtual env. for python:
-# alias venv="source ~/pyvenv/bin/activate"
-
-alias zen='zen-browser'
-alias img='imv'          # or 'imv -f' for fullscreen
 
 
 # highlight style

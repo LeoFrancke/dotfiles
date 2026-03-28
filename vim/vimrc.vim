@@ -16,7 +16,11 @@ let mapleader = " "
 " Spellcheck off by default, except txt and md. Toggle hotkey: <leader>s
 set spelllang=en_us,pt_br,ru
 set spelloptions=camel  " CamelCased DifferntWords
-autocmd FileType markdown,text setlocal spell
+augroup filetype_settings
+    " every autocmd should be inside an augroup, so it becomes idempotent.
+    autocmd!
+    autocmd FileType markdown,text setlocal spell
+augroup END
 
 " Visual tweaks
 syntax on           " Syntax highlighting
@@ -38,7 +42,7 @@ set hlsearch incsearch        " Highlight and incremental search
 set ignorecase smartcase      " Case-insensitive search unless caps used
 set backspace=indent,eol,start
 set nrformats-=octal          " Avoids octal in vim math (increment)
-set nowrapscan                " Search wrap around the end of file
+set nowrapscan                " disable Search Wrap around the of file
 " Folding text:
 set foldmethod=indent
 set foldlevelstart=10

@@ -31,11 +31,6 @@ XDG_TEMPLATES_DIR="$HOME"
 XDG_PUBLICSHARE_DIR="$HOME"
 EOF
 
-# update default user dirs
-xdg-user-dirs-update
-
-echo "File system ready."
-
 
 # 2. --- Package installation ---
 # Use the right package manager
@@ -46,11 +41,18 @@ elif command -v apt &>/dev/null; then
 
     # If using Ubuntu in a GUI, then lsd can be used.
     if [[ "$TERM" != "linux" ]]; then
-        sudo apt install lsd imv gvim
+        sudo apt install -y lsd imv gvim
     else
-        sudo apt install vim
+        sudo apt install -y vim
     fi
 fi
+
+
+# update default user dirs
+# this commands needs to be after xdg-user-dirs installation
+xdg-user-dirs-update
+echo "File system ready."
+
 
 # Update shell to zsh
 if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
