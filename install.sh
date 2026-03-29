@@ -21,7 +21,8 @@ mkdir -pv \
     "$HOME/Downloads"
 
 # XDG default directories
-cat > "$HOME/.config/user-dirs.dirs" <<EOF
+# Single-quoting 'EOF' disables all expansion inside the heredoc.
+cat > "$HOME/.config/user-dirs.dirs" <<'EOF'
 XDG_DESKTOP_DIR="$HOME/Desktop"
 XDG_DOWNLOAD_DIR="$HOME/Downloads"
 XDG_DOCUMENTS_DIR="$HOME/30_personal/1_documents"
@@ -49,7 +50,7 @@ fi
 
 
 # update default user dirs
-# this commands needs to be after xdg-user-dirs installation
+# this command needs to be after xdg-user-dirs installation
 xdg-user-dirs-update
 echo "File system ready."
 

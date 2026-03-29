@@ -1,6 +1,6 @@
 # dotfiles
-Config files for my dev environment.
-Managed by symlinks.
+Config files for my dev environment. Managed by symlinks.
+It handles distro detection, TTY detection, idempotent plugin installations.
 
 
 ## Including:
@@ -12,6 +12,10 @@ Managed by symlinks.
 
 
 ## TO DO list
-- [ ] tmux
+- [ ] GRUB theme
+- [ ] Plymouth splash screen
+- [ ] error msgs at startup
 
+- [ ] tmux
+- [ ] kanata: swap CapsLock and Escape
 

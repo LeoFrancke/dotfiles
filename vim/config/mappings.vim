@@ -8,10 +8,15 @@ nnoremap <leader>W :wa<CR>
 nnoremap <leader>q :call ConfirmQuit()<CR>
 nnoremap <silent> <leader>x :wq<CR>
 nnoremap <leader>s :setlocal spell! spell?<CR>
+" Accepts first spelling suggestion
 nnoremap <leader>z 1z=
 
 " Run python script
-autocmd FileType python nnoremap <buffer> <F5> :!python %<CR>
+augroup python_run_script
+    " every autocmd should be inside an augroup, so it becomes idempotent.
+    autocmd!
+    autocmd FileType python nnoremap <buffer> <F5> :!python %<CR>
+augroup END
 
 " --- Navigation ---
 " Toggle highlight search
@@ -75,6 +80,8 @@ vnoremap s l
 " Operator-pending mode
 onoremap t gj
 onoremap n gk
+" Conflict with vim-surround:
+" d, c and y are operators. Followed by 's', it triggers vim-surround.
 "onoremap s l
 
 
@@ -100,9 +107,9 @@ vnoremap K Nzzzv
 onoremap k nzzzv
 onoremap K Nzzzv
 " ~ Center screen after search jumps
-" n     : performs search -> prints warning
-" zz    : recenter -> forces redraw
-" zv    : open folds -> forces redraw again
+" n     : performs search   -> jumps to the next match
+" zz    : recenter          -> forces redraw
+" zv    : open folds        -> forces redraw again
 
 
 

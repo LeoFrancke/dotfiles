@@ -42,10 +42,10 @@ set hlsearch incsearch        " Highlight and incremental search
 set ignorecase smartcase      " Case-insensitive search unless caps used
 set backspace=indent,eol,start
 set nrformats-=octal          " Avoids octal in vim math (increment)
-set nowrapscan                " disable Search Wrap around the of file
+" set nowrapscan                " disable Search Wrap around the of file
 " Folding text:
 set foldmethod=indent
-set foldlevelstart=10
+set foldlevelstart=4
 " zc    : fold close
 " zo    : fold open
 " zM    : close all folds
