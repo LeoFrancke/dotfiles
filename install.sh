@@ -13,9 +13,10 @@ mkdir -pv \
     "$HOME/20_foundations" \
     "$HOME/30_personal/1_documents" \
     "$HOME/30_personal/5_screenshots" \
+    "$HOME/30_personal/6_videos" \
     "$HOME/30_personal/7_music" \
     "$HOME/40_professional" \
-    "$HOME/50_resources" \
+    "$HOME/50_resources/templates" \
     "$HOME/90_archive" \
     "$HOME/Desktop" \
     "$HOME/Downloads"
@@ -27,8 +28,9 @@ XDG_DESKTOP_DIR="$HOME/Desktop"
 XDG_DOWNLOAD_DIR="$HOME/Downloads"
 XDG_DOCUMENTS_DIR="$HOME/30_personal/1_documents"
 XDG_PICTURES_DIR="$HOME/30_personal/5_screenshots"
+XDG_VIDEOS_DIR="$HOME/30_personal/6_videos"
 XDG_MUSIC_DIR="$HOME/30_personal/7_music"
-XDG_TEMPLATES_DIR="$HOME"
+XDG_TEMPLATES_DIR="$HOME/50_resources/templates"
 XDG_PUBLICSHARE_DIR="$HOME"
 EOF
 
@@ -90,9 +92,10 @@ echo "Zsh plugins installed. Run: source ~/.zshrc"
 
 # 3. --- Dotfiles config ---
 DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
-mkdir -pv "$HOME/.vim/config"
-mkdir -pv "$HOME/.vim/colors"
-mkdir -pv "$HOME/.vim/spell"
+mkdir -pv \
+    "$HOME/.vim/config" \
+    "$HOME/.vim/colors" \
+    "$HOME/.vim/spell"
 
 # symlink of main dotfiles
 ln -sfn "$DOTFILES/vim/vimrc.vim"   ~/.vimrc
