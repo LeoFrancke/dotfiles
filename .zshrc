@@ -155,12 +155,14 @@ if [[ "$TERM" != "linux" ]]; then
             lsd -lAh --sort=time --reverse --total-size --header \
                 --date '+%Y %b %d %H:%M' \
                 --ignore-glob=".local" --ignore-glob=".cache" \
-                --ignore-glob=".zen" --ignore-glob=".vscode"
+                --ignore-glob=".zen" --ignore-glob=".vscode" \
+                "$@" # This allows all arguments passed to the function to be sent to lsd.
 
             echo "\n  (hidden dirs: .local .cache .zen .vscode)"
         else
             lsd -lAh --sort=time --reverse --total-size --header \
-                --date '+%Y %b %d %H:%M'
+                --date '+%Y %b %d %H:%M' \
+                "$@"
         fi
     }
 
