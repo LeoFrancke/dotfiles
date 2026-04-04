@@ -80,13 +80,17 @@ HIST_STAMPS="yyyy-mm-dd"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-    git gitfast
+    git 
+    gitfast # git completions
     zsh-autosuggestions zsh-completions zsh-syntax-highlighting
-    colored-man-pages
+    # colored-man-pages
     # rust
 )
 
 source $ZSH/oh-my-zsh.sh
+
+# Colored man pages
+export MANPAGER="bat -plman"
 
 # Remove bold from executable files / dirs are still bold.
 LS_COLORS="${LS_COLORS}:ex=32"
@@ -126,13 +130,17 @@ alias zh='$EDITOR ~/.zsh_history'
 
 alias md='mkdir -pv'
 alias rd='rmdir -v' # only empty dirs
-alias rm='rm -Iv' # interactive + verbose
+alias rm='rm -iv' # interactive=always + verbose
+alias mv='mv -iv'
 
 # file browsing
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
+
+# https://github.com/nvbn/thefuck
+eval $(thefuck --alias fk)
 
 # activate virtual env. for python:
 # alias venv="source ~/pyvenv/bin/activate"
@@ -156,13 +164,13 @@ if [[ "$TERM" != "linux" ]]; then
                 --date '+%Y %b %d %H:%M' \
                 --ignore-glob=".local" --ignore-glob=".cache" \
                 --ignore-glob=".zen" --ignore-glob=".vscode" \
-                "$@" # This allows all arguments passed to the function to be sent to lsd.
+                "$@" # Allows all arguments passed to the function to be sent to lsd.
 
             echo "\n  (hidden dirs: .local .cache .zen .vscode)"
         else
             lsd -lAh --sort=time --reverse --total-size --header \
                 --date '+%Y %b %d %H:%M' \
-                "$@"
+                "$@" # Allows all arguments passed to the function to be sent to lsd.
         fi
     }
 
@@ -210,6 +218,10 @@ bindkey '^l' history-incremental-search-forward   # Ctrl + l (Dvorak l, QWERTY n
 # Clear screen (Dvorak o, QWERTY s)
 bindkey '^o' clear-screen
 
+# Press 'Esc + Esc' to trigger sudo + last command
+sudo-last-command() { BUFFER="sudo $(fc -ln -1)"; zle accept-line }
+zle -N sudo-last-command
+bindkey "^[^[" sudo-last-command  # Esc Esc
 
 
 # Generated for envman. Do not edit.

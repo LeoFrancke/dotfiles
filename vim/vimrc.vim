@@ -1,4 +1,4 @@
-" Léo Francke's vimrc, 2026 / francke.leandro (at) gmail
+" Leandro Francke's vimrc, 2026
 " To check for errors, type :messages
 
 " Enable modern Vim features
@@ -42,7 +42,7 @@ set hlsearch incsearch        " Highlight and incremental search
 set ignorecase smartcase      " Case-insensitive search unless caps used
 set backspace=indent,eol,start
 set nrformats-=octal          " Avoids octal in vim math (increment)
-" set nowrapscan                " disable Search Wrap around the of file
+" set nowrapscan                " disable Search Wrap around the end of file
 " Folding text:
 set foldmethod=indent
 set foldlevelstart=4
@@ -81,7 +81,7 @@ augroup END
 " Force Esc to be recognized instantly
 set timeout
 set ttimeout
-set timeoutlen=800      " change back to 400ms (or even 300) after building muscle memory. 
+set timeoutlen=700      " change back to 400ms (or even 300) after building muscle memory. 
 set ttimeoutlen=50
 
 

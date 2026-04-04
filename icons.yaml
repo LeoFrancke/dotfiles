@@ -1,0 +1,6 @@
+# LSD config/icon file
+# ~/.config/lsd/icons.yaml
+
+extension:
+  lrc: "󰎇"
+

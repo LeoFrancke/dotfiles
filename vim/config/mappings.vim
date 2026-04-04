@@ -85,27 +85,18 @@ onoremap n gk
 "onoremap s l
 
 
-
 " --- Legacy motions ---
 "nnoremap l <nop>
 inoremap <C-s> <nop>
 nnoremap T J
 
 " Until motion: <J ~ j>
-nnoremap j t
-nnoremap J T
-vnoremap j t
-vnoremap J T
-onoremap j t
-onoremap J T
+noremap j t
+noremap J T
 
 " Search: <K ~ k>
-nnoremap k nzzzv
-nnoremap K Nzzzv
-vnoremap k nzzzv
-vnoremap K Nzzzv
-onoremap k nzzzv
-onoremap K Nzzzv
+noremap k nzzzv
+noremap K Nzzzv
 " ~ Center screen after search jumps
 " n     : performs search   -> jumps to the next match
 " zz    : recenter          -> forces redraw

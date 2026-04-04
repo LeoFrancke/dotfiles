@@ -98,11 +98,14 @@ mkdir -pv \
     "$HOME/.vim/spell"
 
 # symlink of main dotfiles
-ln -sfn "$DOTFILES/vim/vimrc.vim"   ~/.vimrc
-ln -sfn "$DOTFILES/.zshrc"          ~/.zshrc
-ln -sfn "$DOTFILES/.gitconfig"      ~/.gitconfig
-ln -sfn "$DOTFILES/.wezterm.lua"    ~/.wezterm.lua
-ln -sfn "$DOTFILES/.p10k.zsh"       ~/.p10k.zsh
+ln -sfn "$DOTFILES/vim/vimrc.vim"       ~/.vimrc
+ln -sfn "$DOTFILES/.zshrc"              ~/.zshrc
+ln -sfn "$DOTFILES/.gitconfig"          ~/.gitconfig
+ln -sfn "$DOTFILES/.wezterm.lua"        ~/.wezterm.lua
+ln -sfn "$DOTFILES/.p10k.zsh"           ~/.p10k.zsh
+ln -sfn "$DOTFILES/icons.yaml"          ~/.config/lsd/icons.yaml
+ln -sfn "$DOTFILES/rmpc/config.ron"     ~/.config/rmpc/config.ron
+ln -sfn "$DOTFILES/glow.yml"            ~/.config/glow/glow.yml
 
 # vim plug install, if not already installed
 [ ! -f ~/.vim/autoload/plug.vim ] && \
