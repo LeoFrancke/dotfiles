@@ -182,6 +182,8 @@ if [[ "$TERM" != "linux" ]]; then
 else
     # TTY doesn't support lsd/nerd-fonts, so use ls
     alias la='ls -lAh --sort=time --reverse --color=tty'
+
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='underline'
 fi
 
 

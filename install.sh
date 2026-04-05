@@ -38,13 +38,13 @@ EOF
 # 2. --- Package installation ---
 # Use the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed zsh git curl gvim wezterm bat lsd imv xdg-user-dirs
+    sudo pacman -S --needed zsh git curl gvim wezterm bat lsd thefuck imv glow xdg-user-dirs
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs
+    sudo apt update && sudo apt install -y zsh git curl bat thefuck xdg-user-dirs
 
     # If using Ubuntu in a GUI, then lsd can be used.
     if [[ "$TERM" != "linux" ]]; then
-        sudo apt install -y lsd imv gvim
+        sudo apt install -y gvim wezterm lsd imv glow
     else
         sudo apt install -y vim
     fi
