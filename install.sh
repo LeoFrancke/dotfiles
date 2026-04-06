@@ -38,20 +38,20 @@ EOF
 # 2. --- Package installation ---
 # Use the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed zsh git curl gvim wezterm bat lsd thefuck imv glow xdg-user-dirs
+    sudo pacman -S --needed zsh gvim wezterm git curl bat lsd thefuck xdg-user-dirs fastfetch imv glow 
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl bat thefuck xdg-user-dirs
+    sudo apt update && sudo apt install -y zsh git curl bat thefuck xdg-user-dirs #fastfetch
 
     # If using Ubuntu in a GUI, then lsd can be used.
     if [[ "$TERM" != "linux" ]]; then
         sudo apt install -y gvim wezterm lsd imv glow
-    else
+    else  # tty only
         sudo apt install -y vim
     fi
 fi
 
 
-# update default user dirs
+# update default user directories
 # this command needs to be after xdg-user-dirs installation
 xdg-user-dirs-update
 echo "File system ready."

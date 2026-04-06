@@ -8,6 +8,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
 "Plug 'vim-python/python-syntax'      " Python syntax
 Plug 'rust-lang/rust.vim'            " Rust support
+Plug 'ron-rs/ron.vim'
 
 " Auto-closing w/ smart-jump
 Plug 'Raimondi/delimitMate'          

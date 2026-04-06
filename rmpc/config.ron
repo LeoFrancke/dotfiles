@@ -3,13 +3,17 @@
 #![enable(unwrap_newtypes)]
 #![enable(unwrap_variant_newtypes)]
 (
-    /* address: "127.0.0.1:6600", */
-    address: "/home/leo/.config/mpd/socket",
+    address: "127.0.0.1:6600",
+    /* To make youtube direct playback available */
+    /* address: "/home/leo/.config/mpd/socket", */
     /* password: None, */
     theme: Some("catppuccin_mocha"),
     lyrics_dir: Some("~/.config/rmpc/lyrics"),
     lyrics_offset_ms: 0,
+
+    /* Script that adds lyrics (source: www.lrclib.net) */
     on_song_change: Some(["~/.config/rmpc/fetch_lyrics.sh"]),
+
     cache_dir: "~/.config/rmpc/cache",
     volume_step: 5,
     max_fps: 30,
