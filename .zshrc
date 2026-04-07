@@ -47,7 +47,7 @@ zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 # DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
-DISABLE_AUTO_TITLE="true"
+# DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -92,8 +92,6 @@ source $ZSH/oh-my-zsh.sh
 # Colored man pages
 export MANPAGER="bat -plman"
 
-# Remove bold from executable files / dirs are still bold.
-LS_COLORS="${LS_COLORS}:ex=32"
 
 
 # User configuration
@@ -139,9 +137,6 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
-# https://github.com/nvbn/thefuck
-eval $(thefuck --alias fk)
-
 # activate virtual env. for python:
 # alias venv="source ~/pyvenv/bin/activate"
 
@@ -156,6 +151,9 @@ fi
 if [[ "$TERM" != "linux" ]]; then
     alias ls='lsd'
     alias lst='lsd --tree --depth 2'
+
+    # https://github.com/nvbn/thefuck
+    eval $(thefuck --alias fk)
 
     # if in ~ (home), then ignore some dirs and echo msg
     function lsd_long_all_human_readable() {
@@ -183,7 +181,8 @@ else
     # TTY doesn't support lsd/nerd-fonts, so use ls
     alias la='ls -lAh --sort=time --reverse --color=tty'
 
-    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='underline'
+    # autocomplete on tty
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=yellow'
 fi
 
 
@@ -192,6 +191,9 @@ fi
 ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+
+# Remove bold from executable files / dirs are still bold.
+LS_COLORS="${LS_COLORS}:ex=32"
 
 # vim mode
 # bindkey -v
