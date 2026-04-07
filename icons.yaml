@@ -1,6 +1,27 @@
 # LSD config/icon file
 # ~/.config/lsd/icons.yaml
 
+# Exact filename
+name:
+  # zsh
+  .zhistory: "󱆃"
+  .dir_colors: ""
+
+
 extension:
+  md: ""
+
+  # rust object notation
+  ron: ""
+
+  # backup: undo symbol, intuitive
+  bk: "󰕌"
+
+  # lyrics file
   lrc: "󰎇"
+
+
+
+
+
 

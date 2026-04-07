@@ -7,8 +7,8 @@
     /* To make youtube direct playback available */
     /* address: "/home/leo/.config/mpd/socket", */
     /* password: None, */
-    theme: Some("catppuccin_mocha"),
-    lyrics_dir: Some("~/.config/rmpc/lyrics"),
+    theme: Some("theme_catppuccin"),
+    lyrics_dir: Some("~/30_personal/7_music/0_lyrics"),
     lyrics_offset_ms: 0,
 
     /* Script that adds lyrics (source: www.lrclib.net) */
@@ -143,7 +143,7 @@
     ),
     search: (
         case_sensitive: false,
-        ignore_diacritics: false,
+        ignore_diacritics: true,
         search_button: false,
         mode: Contains,
         tags: [
@@ -167,30 +167,9 @@
             pane: Split(
                 direction: Horizontal,
                 panes: [
+                    /* Left column, queue tab */
                     (
                         size: "40%",
-                        pane: Split(
-                            direction: Vertical,
-                            panes: [
-                                (
-                                    size: "100%",
-                                    borders: "LEFT | RIGHT | TOP",
-                                    border_symbols: Rounded,
-                                    pane: Pane(AlbumArt)
-                                ),
-                                (
-                                    size: "7",
-                                    borders: "ALL",
-                                    border_symbols: Inherited(parent: Rounded, top_left: "├", top_right: "┤",),
-                                    border_title: [(kind: Text(" Lyrics "))],
-                                    border_title_alignment: Right,
-                                    pane: Pane(Lyrics)
-                                ),
-                            ],
-                        ),
-                    ), 
-                    (
-                        size: "60%",
                         pane: Split(
                             direction: Vertical,
                             panes: [
@@ -233,6 +212,30 @@
                             ],
                         )
                     ),
+
+                    /* Right column, queue tab */
+                    (
+                        size: "60%",
+                        pane: Split(
+                            direction: Vertical,
+                            panes: [
+                                (
+                                    size: "100%",
+                                    borders: "LEFT | RIGHT | TOP",
+                                    border_symbols: Rounded,
+                                    border_title: [(kind: Text(" Lyrics "))],
+                                    border_title_alignment: Right,
+                                    pane: Pane(Lyrics)
+                                ),
+                                (
+                                    size: "14",
+                                    borders: "ALL",
+                                    border_symbols: Inherited(parent: Rounded, top_left: "├", top_right: "┤",),
+                                    pane: Pane(AlbumArt)
+                                ),
+                            ],
+                        ),
+                    ), 
                 ],
             ),
         ),
