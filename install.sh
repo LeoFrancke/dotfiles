@@ -51,6 +51,12 @@ if command -v pacman &>/dev/null; then
 elif command -v apt &>/dev/null; then
     sudo apt update && sudo apt install -y zsh git curl bat thefuck xdg-user-dirs #fastfetch
     # kanata
+    
+    if command -v kanata &>/dev/null; then
+        sudo curl -L https://github.com/jtroo/kanata/releases/latest/download/kanata -o \
+            /usr/local/bin/kanata
+        sudo chmod +x /usr/local/bin/kanata
+    fi
 
     # If using Ubuntu in a GUI, then lsd can be used.
     if [[ "$TERM" != "linux" ]]; then
