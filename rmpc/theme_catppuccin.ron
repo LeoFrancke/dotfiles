@@ -3,7 +3,7 @@
 #![enable(unwrap_variant_newtypes)]
 (
 
-    /* Default Theme */
+    /* Default catppucin Theme */
     /* highlighted_item_style: (fg: "#cba6f7", modifiers: "Bold"), */
     /* current_item_style: (fg: "#a6e3a1", modifiers: "Bold"), */
 

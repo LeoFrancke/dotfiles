@@ -1,0 +1,15 @@
+(defcfg
+    ;; This makes sure that everything not in defsrc passes through normally
+    process-unmapped-keys yes
+)
+
+;; Defines the order of keys that the deflayer entries will operate on.
+(defsrc
+    caps  esc
+)
+
+;; comment
+(deflayer base
+    (tap-hold 200 200 esc lctl)
+    caps
+)

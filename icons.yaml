@@ -9,19 +9,11 @@ name:
 
 
 extension:
-  md: ""
-
-  # rust object notation
-  ron: ""
-
-  # backup: undo symbol, intuitive
-  bk: "󰕌"
-
-  # lyrics file
-  lrc: "󰎇"
-
-
-
-
+  md: ""    # markdown
+  kbd: "󰌓"   # kanata keyboard
+  
+  ron: ""   # rust object notation
+  bk: "󰕌"    # backup: undo symbol, intuitive
+  lrc: "󰎇"   # lyrics file
 
 

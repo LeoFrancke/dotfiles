@@ -3,8 +3,9 @@ set -e # exit on error
 
 # Steps:
 # 1. File system
-# 2. Install packages (pacman or apt)
+# 2. Install packages (pacman or apt) and plugins
 # 3. Dotfiles config
+# 4. Kanata installation
 
 
 # 1. --- File system structure ---
@@ -35,16 +36,25 @@ XDG_PUBLICSHARE_DIR="$HOME"
 EOF
 
 
-# 2. --- Package installation ---
+# 2. --- Package and Plugins installation ---
 # Use the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed zsh gvim wezterm git curl bat lsd thefuck xdg-user-dirs fastfetch imv glow 
+    sudo pacman -S --needed wezterm zsh gvim git curl bat lsd thefuck xdg-user-dirs fastfetch imv glow 
+
+    # avoids error if yay not installed
+    if command -v yay &>/dev/null; then
+        yay -S --needed kanata-bin
+    else
+        echo "yay not found! Install it manually, then run this script again."
+    fi
+
 elif command -v apt &>/dev/null; then
     sudo apt update && sudo apt install -y zsh git curl bat thefuck xdg-user-dirs #fastfetch
+    # kanata
 
     # If using Ubuntu in a GUI, then lsd can be used.
     if [[ "$TERM" != "linux" ]]; then
-        sudo apt install -y gvim wezterm lsd imv glow
+        sudo apt install -y wezterm gvim lsd imv glow
     else  # tty only
         sudo apt install -y vim
     fi
@@ -56,12 +66,10 @@ fi
 xdg-user-dirs-update
 echo "File system ready."
 
-
 # Update shell to zsh
 if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
     chsh -s $(which zsh)
-else
-    echo "Shell is already Zsh."
+    echo "Your shell is now zsh."
 fi
 
 # --- Oh My Zsh ---
@@ -90,19 +98,26 @@ ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 echo "Zsh plugins installed. Run: source ~/.zshrc"
 
 
+
 # 3. --- Dotfiles config ---
 DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 mkdir -pv \
     "$HOME/.vim/config" \
     "$HOME/.vim/colors" \
-    "$HOME/.vim/spell"
+    "$HOME/.vim/spell" \
+    "$HOME/.config/lsd" \
+    "$HOME/.config/rmpc/themes" \
+    "$HOME/.config/glow" \
+    "$HOME/.config/kanata" \
+    "$HOME/.config/systemd/user"
 
 # symlink of main dotfiles
-ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
-ln -sfn "$DOTFILES/.zshrc"                      ~/.zshrc
-ln -sfn "$DOTFILES/.gitconfig"                  ~/.gitconfig
 ln -sfn "$DOTFILES/.wezterm.lua"                ~/.wezterm.lua
+ln -sfn "$DOTFILES/.zshrc"                      ~/.zshrc
 ln -sfn "$DOTFILES/.p10k.zsh"                   ~/.p10k.zsh
+ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
+ln -sfn "$DOTFILES/.gitconfig"                  ~/.gitconfig
+ln -sfn "$DOTFILES/kanata.kbd"                  ~/.config/kanata/kanata.kbd
 ln -sfn "$DOTFILES/icons.yaml"                  ~/.config/lsd/icons.yaml
 ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
@@ -113,6 +128,8 @@ ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+echo "Don't forget to install Vim Plugins, inside vim: :PlugInstall"
+
 # symlink of vim files
 ln -sfn "$DOTFILES/vim/colors/modifications.vim"   ~/.vim/colors/modifications.vim
 ln -sfn "$DOTFILES/vim/config/mappings.vim"        ~/.vim/config/mappings.vim
@@ -122,7 +139,39 @@ ln -sfn "$DOTFILES/vim/config/statusline.vim"      ~/.vim/config/statusline.vim
 ln -sfn "$DOTFILES/vim/spell/en.utf-8.add"         ~/.vim/spell/en.utf-8.add
 
 echo "Dotfiles linked!"
-echo 'To verify the symlinks worked: $ ls -la ~ | grep "\->"'
-echo "Don't forget to install Vim Plugins." 
-echo "Inside Vim: :PlugInstall"
+
+
+
+# 4. --- KANATA keyboard config and installation ---
+if command -v kanata &>/dev/null; then
+    # groups & udev
+    sudo groupadd --system uinput 2>/dev/null || true
+    sudo usermod -aG input,uinput "$USER"
+    sudo tee /etc/udev/rules.d/99-kanata.rules > /dev/null <<'EOF'
+    KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
+EOF
+    sudo udevadm control --reload-rules && sudo udevadm trigger
+
+    # load uinput on boot
+    echo "uinput" | sudo tee /etc/modules-load.d/uinput.conf > /dev/null
+
+    # service file `kanata.service`
+    cat > "$HOME/.config/systemd/user/kanata.service" <<'EOF'
+    [Unit]
+    Description=Kanata keyboard remapper
+
+    [Service]
+    Type=simple
+    ExecStart=/usr/bin/kanata --cfg %h/.config/kanata/kanata.kbd
+
+    [Install]
+    WantedBy=default.target
+EOF
+# EOF must close at column 0
+
+    systemctl --user daemon-reload
+    systemctl --user enable kanata
+    echo "Kanata enabled. Reboot for group changes to take effect."
+
+fi
 
