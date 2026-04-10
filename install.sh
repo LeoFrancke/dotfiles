@@ -50,12 +50,12 @@ if command -v pacman &>/dev/null; then
 
 elif command -v apt &>/dev/null; then
     sudo apt update && sudo apt install -y zsh git curl bat thefuck xdg-user-dirs #fastfetch
-    # kanata
     
-    if command -v kanata &>/dev/null; then
+    # kanata install on ubuntu
+    if ! command -v kanata &>/dev/null; then
         sudo curl -L https://github.com/jtroo/kanata/releases/latest/download/kanata -o \
-            /usr/local/bin/kanata
-        sudo chmod +x /usr/local/bin/kanata
+            /usr/bin/kanata
+        sudo chmod +x /usr/bin/kanata
     fi
 
     # If using Ubuntu in a GUI, then lsd can be used.
@@ -153,9 +153,8 @@ if command -v kanata &>/dev/null; then
     # groups & udev
     sudo groupadd --system uinput 2>/dev/null || true
     sudo usermod -aG input,uinput "$USER"
-    sudo tee /etc/udev/rules.d/99-kanata.rules > /dev/null <<'EOF'
-    KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
-EOF
+    echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' \
+        | sudo tee /etc/udev/rules.d/99-kanata.rules > /dev/null
     sudo udevadm control --reload-rules && sudo udevadm trigger
 
     # load uinput on boot
@@ -163,17 +162,17 @@ EOF
 
     # service file `kanata.service`
     cat > "$HOME/.config/systemd/user/kanata.service" <<'EOF'
-    [Unit]
-    Description=Kanata keyboard remapper
+[Unit]
+Description=Kanata keyboard remapper
 
-    [Service]
-    Type=simple
-    ExecStart=/usr/bin/kanata --cfg %h/.config/kanata/kanata.kbd
+[Service]
+Type=simple
+ExecStart=/usr/bin/kanata --cfg %h/.config/kanata/kanata.kbd
 
-    [Install]
-    WantedBy=default.target
+[Install]
+WantedBy=default.target
 EOF
-# EOF must close at column 0
+# EOF heredoc must be at column 0
 
     systemctl --user daemon-reload
     systemctl --user enable kanata

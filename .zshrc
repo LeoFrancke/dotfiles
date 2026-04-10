@@ -128,7 +128,7 @@ alias zh='$EDITOR ~/.zsh_history'
 
 alias md='mkdir -pv'
 alias rd='rmdir -v' # only empty dirs
-alias rm='rm -iv' # interactive=always + verbose
+alias rm='rm -Iv' # interactive=always + verbose
 alias mv='mv -iv'
 
 # file browsing
