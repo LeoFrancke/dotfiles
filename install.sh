@@ -39,7 +39,7 @@ EOF
 # 2. --- Package and Plugins installation ---
 # Use the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed wezterm zsh gvim git curl bat lsd thefuck xdg-user-dirs fastfetch imv glow 
+    sudo pacman -S --needed wezterm zsh gvim git curl bat lsd thefuck xdg-user-dirs fastfetch imv glow tldr
 
     # avoids error if yay not installed
     if command -v yay &>/dev/null; then
@@ -60,7 +60,7 @@ elif command -v apt &>/dev/null; then
 
     # If using Ubuntu in a GUI, then lsd can be used.
     if [[ "$TERM" != "linux" ]]; then
-        sudo apt install -y wezterm gvim lsd imv glow
+        sudo apt install -y wezterm gvim lsd imv glow tldr
     else  # tty only
         sudo apt install -y vim
     fi
