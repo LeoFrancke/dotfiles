@@ -1,3 +1,7 @@
+;; swap: CapsLock <=> Esc
+;; CapsLock hold => Ctrl
+
+
 (defcfg
     ;; This makes sure that everything not in defsrc passes through normally
     process-unmapped-keys yes

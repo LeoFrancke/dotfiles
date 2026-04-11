@@ -95,11 +95,12 @@ ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ] && \
     git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
-[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ] && \
-    git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ] && \
     git clone --depth=1 https://github.com/zsh-users/zsh-completions "$ZSH_CUSTOM/plugins/zsh-completions"
+
+[ ! -d "$ZSH_CUSTOM/plugins/fast-syntax-highlighting" ] && \
+    git clone --depth=1 https://github.com/zdharma-continuum/fast-syntax-highlighting \
+        "$ZSH_CUSTOM/plugins/fast-syntax-highlighting"
 
 echo "Zsh plugins installed. Run: source ~/.zshrc"
 

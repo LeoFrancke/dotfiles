@@ -1,3 +1,6 @@
+# Primeira linha do .zshrc
+zmodload zsh/zprof
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -80,13 +83,33 @@ HIST_STAMPS="yyyy-mm-dd"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-    git 
-    gitfast # git completions
-    zsh-autosuggestions zsh-completions zsh-syntax-highlighting
-    # colored-man-pages
-    # rust
+    # git  # only aliases and functions
+    # gitfast  # git completions
+    # zsh-syntax-highlighting  # there's a better and faster plugin
+    zsh-autosuggestions 
+    zsh-completions
+    fast-syntax-highlighting
 )
 
+
+# Run compinit manually so we control caching behavior.
+# OMZ would otherwise call it unconditionally on every shell start (slow).
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+    # The dump file is older than 24 hours — do a full init.
+    # This runs compaudit (permission checks) and regenerates the dump.
+    compinit
+else
+    # The dump file is fresh — skip compaudit with the -C flag.
+    # This makes startup significantly faster on most shell opens.
+    compinit -C
+fi
+
+# Prevent OMZ from calling compinit a second time after we already ran it.
+skip_global_compinit=1
+
+
+# Load ohmyzsh
 source $ZSH/oh-my-zsh.sh
 
 # Colored man pages
@@ -182,15 +205,15 @@ else
     alias la='ls -lAh --sort=time --reverse --color=tty'
 
     # autocomplete on tty
-    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=yellow'
+    FAST_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=yellow'
 fi
 
 
 
 # highlight style
-ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
-ZSH_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+FAST_HIGHLIGHT_STYLES[command]='fg=green,bold'
+FAST_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
+FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
 
 # Remove bold from executable files / dirs are still bold.
 LS_COLORS="${LS_COLORS}:ex=32"

@@ -8,6 +8,14 @@ name:
   .dir_colors: ""
 
 
+  # Downloads: "󱃩"
+# binary: ""
+# resources: ""  # 󱉟
+# finances: "󱙹"
+# bitcoin: ""
+# archive: "" / ""
+#
+
 extension:
   md: ""    # markdown
   kbd: "󰌓"   # kanata keyboard
