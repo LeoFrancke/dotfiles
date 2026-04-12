@@ -1,22 +1,9 @@
 # LSD config/icon file
 # ~/.config/lsd/icons.yaml
 
-# filetype:
-#   binary: ""
-
-name:
-  .zhistory: "󱆃"   # zsh
-  .dir_colors: ""
-  vim: ""
-
-  rmpc: ""   # music player
-  downloads: "󱃩"
-  desktop: "󰥟"
-  50_resources: "󱉟"
-  library: "󱉟"
-  90_archive: ""  # / ""
-# finances: "󱙹"
-# bitcoin: ""
+filetype:
+  symlink-file: "󰌹"
+  executable: ""   #  
 
 
 extension:
@@ -28,5 +15,21 @@ extension:
   ron: ""   # rust object notation
   bk: "󰕌"    # backup: undo symbol, intuitive
   lrc: "󰎇"   # lyrics file
+
+
+name:
+  .zhistory: "󱆃"   # zsh
+  .dir_colors: ""
+
+  ## Directories
+  downloads: "󱃩"
+  desktop: "󰥟"
+  50_resources: ""
+  library: "󱉟"
+  90_archive: ""
+  finances: "󱙹"
+  trading: ""
+  rmpc: ""   # music player
+  7_music: ""
 
 
