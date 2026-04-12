@@ -33,11 +33,12 @@ XDG_VIDEOS_DIR="$HOME/30_personal/6_videos"
 XDG_MUSIC_DIR="$HOME/30_personal/7_music"
 XDG_TEMPLATES_DIR="$HOME/50_resources/templates"
 XDG_PUBLICSHARE_DIR="$HOME"
+XDG_PROJECTS_DIR="$HOME/10_projects"
 EOF
 
 
 # 2. --- Package and Plugins installation ---
-# Use the right package manager
+# Determine the right package manager
 if command -v pacman &>/dev/null; then
     sudo pacman -S --needed wezterm zsh gvim git curl bat lsd thefuck xdg-user-dirs fastfetch imv glow tldr
 
@@ -93,16 +94,19 @@ fi
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ] && \
-    git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions \
+        "$ZSH_CUSTOM/plugins/zsh-autosuggestions" && \
+    echo "Installed: zsh-autosuggestions"
 
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ] && \
-    git clone --depth=1 https://github.com/zsh-users/zsh-completions "$ZSH_CUSTOM/plugins/zsh-completions"
+    git clone --depth=1 https://github.com/zsh-users/zsh-completions \
+        "$ZSH_CUSTOM/plugins/zsh-completions" && \
+    echo "Installed: zsh-completions"
 
 [ ! -d "$ZSH_CUSTOM/plugins/fast-syntax-highlighting" ] && \
     git clone --depth=1 https://github.com/zdharma-continuum/fast-syntax-highlighting \
-        "$ZSH_CUSTOM/plugins/fast-syntax-highlighting"
-
-echo "Zsh plugins installed. Run: source ~/.zshrc"
+        "$ZSH_CUSTOM/plugins/fast-syntax-highlighting" && \
+    echo "Installed: fast-syntax-highlighting"
 
 
 

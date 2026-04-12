@@ -1,22 +1,27 @@
 # LSD config/icon file
 # ~/.config/lsd/icons.yaml
 
-# Exact filename
+# filetype:
+#   binary: ""
+
 name:
-  # zsh
-  .zhistory: "󱆃"
+  .zhistory: "󱆃"   # zsh
   .dir_colors: ""
+  vim: ""
 
-
-  # Downloads: "󱃩"
-# binary: ""
-# resources: ""  # 󱉟
+  rmpc: ""   # music player
+  downloads: "󱃩"
+  desktop: "󰥟"
+  50_resources: "󱉟"
+  library: "󱉟"
+  90_archive: ""  # / ""
 # finances: "󱙹"
 # bitcoin: ""
-# archive: "" / ""
-#
+
 
 extension:
+  pdf: ""
+  epub: "󱗖"  #      / 󱉟 
   md: ""    # markdown
   kbd: "󰌓"   # kanata keyboard
   

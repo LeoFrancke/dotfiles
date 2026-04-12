@@ -11,6 +11,10 @@ fi
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
+# Go language variables
+export GOPATH="$HOME/.local/share/go"   # or wherever you want
+export PATH="$GOPATH/bin:$PATH"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -36,9 +40,9 @@ fi
 HYPHEN_INSENSITIVE="true"
 
 # Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
+zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
-zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
 # zstyle ':omz:update' frequency 13
@@ -91,35 +95,25 @@ plugins=(
     fast-syntax-highlighting
 )
 
-
-# Run compinit manually so we control caching behavior.
-# OMZ would otherwise call it unconditionally on every shell start (slow).
-autoload -Uz compinit
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-    # The dump file is older than 24 hours — do a full init.
-    # This runs compaudit (permission checks) and regenerates the dump.
-    compinit
-else
-    # The dump file is fresh — skip compaudit with the -C flag.
-    # This makes startup significantly faster on most shell opens.
-    compinit -C
-fi
-
-# Prevent OMZ from calling compinit a second time after we already ran it.
-skip_global_compinit=1
-
-
 # Load ohmyzsh
 source $ZSH/oh-my-zsh.sh
-
-# Colored man pages
-export MANPAGER="bat -plman"
 
 
 
 # User configuration
+# easy access
+export dots="$HOME/10_projects/leofrancke/dotfiles"
+export python="$HOME/10_projects/leofrancke/python_crashcourse"
+
+export docs="$HOME/30_personal/1_documents"
+export ss="$HOME/30_personal/5_screenshots"
+export music="$HOME/30_personal/7_music"
+
 
 # export MANPATH="/usr/local/man:$MANPATH"
+
+# Colored man pages
+# export MANPAGER="bat -plman"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -250,9 +244,6 @@ sudo-last-command() { BUFFER="sudo $(fc -ln -1)"; zle accept-line }
 zle -N sudo-last-command
 bindkey "^[^[" sudo-last-command  # Esc Esc
 
-
-# Generated for envman. Do not edit.
-[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
