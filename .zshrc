@@ -8,10 +8,7 @@ fi
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# Theme
 if [[ "$TERM" != "linux" ]]; then
     ZSH_THEME="powerlevel10k/powerlevel10k"
 else
@@ -154,7 +151,7 @@ if [[ "$TERM" != "linux" ]]; then
 
     alias la='lsd_long_all_human_readable'
 
-    alias img='imv'          # or 'imv -f' for fullscreen
+    alias img='imv'
     alias zen='zen-browser'
 else
     # TTY doesn't support lsd/nerd-fonts, so use ls
