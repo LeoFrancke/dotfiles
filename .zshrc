@@ -1,6 +1,3 @@
-# Primeira linha do .zshrc
-zmodload zsh/zprof
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -10,10 +7,6 @@ fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
-# Go language variables
-export GOPATH="$HOME/.local/share/go"   # or wherever you want
-export PATH="$GOPATH/bin:$PATH"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
@@ -25,15 +18,6 @@ else
     # TTY uses TERM=linux
     ZSH_THEME="ys"
 fi
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -49,12 +33,6 @@ zstyle ':omz:update' mode disabled  # disable automatic updates
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -81,26 +59,26 @@ HIST_STAMPS="yyyy-mm-dd"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load?
+# Plugins
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-    # git  # only aliases and functions
-    # gitfast  # git completions
-    # zsh-syntax-highlighting  # there's a better and faster plugin
-    zsh-autosuggestions 
-    zsh-completions
-    fast-syntax-highlighting
-)
+plugins=(zsh-autosuggestions zsh-completions fast-syntax-highlighting)
+    # git                       # only aliases and functions
+    # gitfast                   # git completions
+    # zsh-syntax-highlighting   # there's a better and faster plugin
 
 # Load ohmyzsh
 source $ZSH/oh-my-zsh.sh
 
 
 
-# User configuration
+# --- USER CONFIGURATION ---
+# Go language path (different than default)
+export GOPATH="$HOME/.local/share/go"
+export PATH="$GOPATH/bin:$PATH"
+
 # easy access
 export dots="$HOME/10_projects/leofrancke/dotfiles"
 export python="$HOME/10_projects/leofrancke/python_crashcourse"
@@ -110,42 +88,23 @@ export ss="$HOME/30_personal/5_screenshots"
 export music="$HOME/30_personal/7_music"
 
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# Colored man pages
-# export MANPAGER="bat -plman"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
 # Preferred editor for local and remote sessions
+export EDITOR='vim'
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
 #   export EDITOR='nvim'
 # fi
-export EDITOR='vim'
-export VISUAL='vim'
 
-
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
+# Set personal aliases, for a full list, run `alias`.
 alias vimrc='$EDITOR ~/.vimrc'
-alias wez='$EDITOR ~/.wezterm.lua'
 alias zshrc='$EDITOR ~/.zshrc'
+alias wez='$EDITOR ~/.wezterm.lua'
 alias zh='$EDITOR ~/.zsh_history'
 
 alias md='mkdir -pv'
-alias rd='rmdir -v' # only empty dirs
-alias rm='rm -Iv' # interactive=always + verbose
+alias rd='rmdir -v'     # only empty dirs
+alias rm='rm -Iv'       # interactive=always + verbose
 alias mv='mv -iv'
 
 # file browsing
@@ -154,8 +113,6 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
-# activate virtual env. for python:
-# alias venv="source ~/pyvenv/bin/activate"
 
 # ubuntu's binary is batcat
 if command -v bat &>/dev/null; then
@@ -167,29 +124,34 @@ fi
 # if not TTY
 if [[ "$TERM" != "linux" ]]; then
     alias ls='lsd'
-    alias lst='lsd --tree --depth 2'
+    alias lst='lsd --tree --depth 3'
 
     # https://github.com/nvbn/thefuck
-    eval $(thefuck --alias fk)
+    # eval $(thefuck --alias fk)
 
-    # if in ~ (home), then ignore some dirs and echo msg
+    # if the target dir is ~ (home), then ignore some heavy dirs and echo msg
     function lsd_long_all_human_readable() {
-        if [[ "$PWD" == "$HOME" ]]; then
-            lsd -lAh --sort=time --reverse --total-size --header \
-                --date '+%Y %b %d %H:%M' \
-                --ignore-glob=".local" --ignore-glob=".cache" \
-                --ignore-glob=".zen" --ignore-glob=".vscode" \
-                "$@" # Allows all arguments passed to the function to be sent to lsd.
+        # last argument, which would be the target path
+        local target="${@[-1]}"     
+        # if (isEmpty OR isNot a Directory) ... then change $target variable.
+        [[ -z "$target" || ! -d "$target" ]] && target="$PWD"
 
-            echo "\n  (hidden dirs: .local .cache .zen .vscode)"
-        else
-            lsd -lAh --sort=time --reverse --total-size --header \
-                --date '+%Y %b %d %H:%M' \
-                "$@" # Allows all arguments passed to the function to be sent to lsd.
+        local -a extra_flags    # array definition
+        if [[ "$target" == "$HOME" ]]; then
+            extra_flags=(
+                --ignore-glob=".local" --ignore-glob=".cache"
+                --ignore-glob=".zen" --ignore-glob=".vscode"
+            )
+            local extra_msg="\n  (hidden dirs: .local .cache .zen .vscode)"
         fi
+
+        lsd -lAh --sort=time --reverse --total-size --header \
+            --date '+%Y %b %d %H:%M' \
+            "${extra_flags[@]}" "$@"  # $@ allows all arguments passed to the function to be sent to lsd.
+
+        [[ -z "$extra_msg" ]] || echo -e "$extra_msg"  # print msg only if Not empty
     }
 
-    unalias la 2>/dev/null # avoids errors
     alias la='lsd_long_all_human_readable'
 
     alias img='imv'          # or 'imv -f' for fullscreen
@@ -199,7 +161,7 @@ else
     alias la='ls -lAh --sort=time --reverse --color=tty'
 
     # autocomplete on tty
-    FAST_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=yellow'
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=yellow'
 fi
 
 
@@ -211,9 +173,6 @@ FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
 
 # Remove bold from executable files / dirs are still bold.
 LS_COLORS="${LS_COLORS}:ex=32"
-
-# vim mode
-# bindkey -v
 
 
 # Enable command-line editing in Vim
