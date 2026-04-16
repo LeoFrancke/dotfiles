@@ -12,7 +12,7 @@ export ZSH="$HOME/.oh-my-zsh"
 if [[ "$TERM" != "linux" ]]; then
     ZSH_THEME="powerlevel10k/powerlevel10k"
 else
-    # TTY uses TERM=linux
+    # TTY uses $TERM=linux
     ZSH_THEME="ys"
 fi
 
@@ -76,22 +76,15 @@ source $ZSH/oh-my-zsh.sh
 export GOPATH="$HOME/.local/share/go"
 export PATH="$GOPATH/bin:$PATH"
 
-# easy access
+# Easy access for most common dirs
 export dots="$HOME/10_projects/leofrancke/dotfiles"
 export python="$HOME/10_projects/leofrancke/python_crashcourse"
-
 export docs="$HOME/30_personal/1_documents"
 export ss="$HOME/30_personal/5_screenshots"
 export music="$HOME/30_personal/7_music"
 
-
-# Preferred editor for local and remote sessions
+# Preferred editor
 export EDITOR='vim'
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
 
 # Set personal aliases, for a full list, run `alias`.
 alias vimrc='$EDITOR ~/.vimrc'
@@ -105,7 +98,7 @@ alias rm='rm -Iv'       # interactive=always + verbose
 alias mv='mv -iv'
 
 # file browsing
-alias ..='cd ..'
+# alias ..='cd ..'  # works with option 'autocd' enabled
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
@@ -120,12 +113,6 @@ fi
 
 # if not TTY
 if [[ "$TERM" != "linux" ]]; then
-    alias ls='lsd'
-    alias lst='lsd --tree --depth 3'
-
-    # https://github.com/nvbn/thefuck
-    # eval $(thefuck --alias fk)
-
     # if the target dir is ~ (home), then ignore some heavy dirs and echo msg
     function lsd_long_all_human_readable() {
         # last argument, which would be the target path
@@ -149,10 +136,14 @@ if [[ "$TERM" != "linux" ]]; then
         [[ -z "$extra_msg" ]] || echo -e "$extra_msg"  # print msg only if Not empty
     }
 
+    alias ls='lsd'
+    alias lst='lsd --tree --depth 3'
     alias la='lsd_long_all_human_readable'
-
     alias img='imv'
     alias zen='zen-browser'
+
+    # https://github.com/nvbn/thefuck
+    # eval $(thefuck --alias fk)
 else
     # TTY doesn't support lsd/nerd-fonts, so use ls
     alias la='ls -lAh --sort=time --reverse --color=tty'
@@ -162,8 +153,7 @@ else
 fi
 
 
-
-# highlight style
+# Highlight style
 FAST_HIGHLIGHT_STYLES[command]='fg=green,bold'
 FAST_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
 FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
@@ -171,11 +161,18 @@ FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
 # Remove bold from executable files / dirs are still bold.
 LS_COLORS="${LS_COLORS}:ex=32"
 
+# Shell options (settings). For a complete list: set -o
+set -o vi           # vim mode on the command line
+set +o emacs        # disable
+set -o noclobber    # Prevents file overwrite by the '>' operator
+set -o dvorak       # Adjusts the spelling corrector's typo heuristics for Dvorak
+# set -o extendedglob # Enables powerful glob operators like ^, #, ~. Off to avoid trouble
+set -o verbose
 
 # Enable command-line editing in Vim
-autoload -U edit-command-line
-zle -N edit-command-line
-bindkey '^v' edit-command-line  # Ctrl + v to edit command in Vim
+# autoload -U edit-command-line
+# zle -N edit-command-line
+# bindkey '^v' edit-command-line  # Ctrl + v to edit command in Vim
 
 
 # --- key-bindings ---
@@ -195,10 +192,20 @@ bindkey '^l' history-incremental-search-forward   # Ctrl + l (Dvorak l, QWERTY n
 # Clear screen (Dvorak o, QWERTY s)
 bindkey '^o' clear-screen
 
-# Press 'Esc + Esc' to trigger sudo + last command
+# Press 'Esc + Esc': sudo + last command
 sudo-last-command() { BUFFER="sudo $(fc -ln -1)"; zle accept-line }
-zle -N sudo-last-command
-bindkey "^[^[" sudo-last-command  # Esc Esc
+zle -N sudo-last-command            # make possible to set a key-binding
+bindkey "^[^[" sudo-last-command    # Esc + Esc
+
+
+# Expands an alias to its full command when Space is pressed.
+function globalias() {
+    zle _expand_alias   # expand the alias under the cursor
+    zle expand-word     # expand anything else (globs, etc.)
+}
+zle -N globalias           # Register the function as a ZLE widget so it can be bound to a key.
+bindkey ' '  globalias     # Space      → expand alias, then insert space
+bindkey '^ ' magic-space   # Ctrl+Space → insert a literal space (no expansion)
 
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

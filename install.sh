@@ -40,7 +40,7 @@ EOF
 # 2. --- Package and Plugins installation ---
 # Determine the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed wezterm zsh gvim git curl bat lsd thefuck xdg-user-dirs fastfetch imv glow tldr
+    sudo pacman -S --needed wezterm zsh gvim git curl bat lsd xdg-user-dirs fastfetch imv glow tldr #thefuck
 
     # avoids error if yay not installed
     if command -v yay &>/dev/null; then
@@ -50,7 +50,7 @@ if command -v pacman &>/dev/null; then
     fi
 
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl bat thefuck xdg-user-dirs #fastfetch
+    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs #fastfetch thefuck
     
     # kanata install on ubuntu
     if ! command -v kanata &>/dev/null; then
@@ -67,7 +67,6 @@ elif command -v apt &>/dev/null; then
     fi
 fi
 
-
 # update default user directories
 # this command needs to be after xdg-user-dirs installation
 xdg-user-dirs-update
@@ -75,7 +74,7 @@ echo "File system ready."
 
 # Update shell to zsh
 if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
-    chsh -s $(which zsh)
+    chsh -s "$(which zsh)"
     echo "Your shell is now zsh."
 fi
 
@@ -87,7 +86,8 @@ fi
 # --- Powerlevel10k ---
 if [[ "$TERM" != "linux" ]] && [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
-        "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+        "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" && \
+    echo "Theme installed: PowerLevel10k"
 fi
 
 # --- ZSH plugins ---
@@ -107,7 +107,6 @@ ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
     git clone --depth=1 https://github.com/zdharma-continuum/fast-syntax-highlighting \
         "$ZSH_CUSTOM/plugins/fast-syntax-highlighting" && \
     echo "Installed: fast-syntax-highlighting"
-
 
 
 # 3. --- Dotfiles config ---
@@ -138,7 +137,6 @@ ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 [ ! -f ~/.vim/autoload/plug.vim ] && \
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
 echo "Don't forget to install Vim Plugins, inside vim: :PlugInstall"
 
 # symlink of vim files
@@ -148,15 +146,13 @@ ln -sfn "$DOTFILES/vim/config/persistent_undo.vim" ~/.vim/config/persistent_undo
 ln -sfn "$DOTFILES/vim/config/plugins.vim"         ~/.vim/config/plugins.vim
 ln -sfn "$DOTFILES/vim/config/statusline.vim"      ~/.vim/config/statusline.vim
 ln -sfn "$DOTFILES/vim/spell/en.utf-8.add"         ~/.vim/spell/en.utf-8.add
-
 echo "Dotfiles linked!"
-
 
 
 # 4. --- KANATA keyboard config and installation ---
 if command -v kanata &>/dev/null; then
     # groups & udev
-    sudo groupadd --system uinput 2>/dev/null || true
+    sudo groupadd --system uinput 2>/dev/null || true  # returns True if group already exists
     sudo usermod -aG input,uinput "$USER"
     echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' \
         | sudo tee /etc/udev/rules.d/99-kanata.rules > /dev/null
@@ -182,6 +178,5 @@ EOF
     systemctl --user daemon-reload
     systemctl --user enable kanata
     echo "Kanata enabled. Reboot for group changes to take effect."
-
 fi
 
