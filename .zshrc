@@ -114,7 +114,7 @@ fi
 # if not TTY
 if [[ "$TERM" != "linux" ]]; then
     # if the target dir is ~ (home), then ignore some heavy dirs and echo msg
-    function lsd_long_all_human_readable() {
+    function lsd_function() {
         # last argument, which would be the target path
         local target="${@[-1]}"     
         # if (isEmpty OR isNot a Directory) ... then change $target variable.
@@ -138,7 +138,7 @@ if [[ "$TERM" != "linux" ]]; then
 
     alias ls='lsd'
     alias lst='lsd --tree --depth 3'
-    alias la='lsd_long_all_human_readable'
+    alias la='lsd_function'
     alias img='imv'
     alias zen='zen-browser'
 
@@ -163,11 +163,10 @@ LS_COLORS="${LS_COLORS}:ex=32"
 
 # Shell options (settings). For a complete list: set -o
 set -o vi           # vim mode on the command line
-set +o emacs        # disable
-set -o noclobber    # Prevents file overwrite by the '>' operator
 set -o dvorak       # Adjusts the spelling corrector's typo heuristics for Dvorak
-# set -o extendedglob # Enables powerful glob operators like ^, #, ~. Off to avoid trouble
-set -o verbose
+set -o noclobber    # Prevents file overwrite by the '>' operator
+set +o emacs        # disabled
+set +o extendedglob # Enables powerful glob operators like ^, #, ~. Off to avoid trouble
 
 # Enable command-line editing in Vim
 # autoload -U edit-command-line
@@ -200,8 +199,9 @@ bindkey "^[^[" sudo-last-command    # Esc + Esc
 
 # Expands an alias to its full command when Space is pressed.
 function globalias() {
-    zle _expand_alias   # expand the alias under the cursor
-    zle expand-word     # expand anything else (globs, etc.)
+    zle _expand_alias      # expand the alias under the cursor
+    # zle expand-word        # expand anything else (globs, variables, etc.)
+    zle self-insert
 }
 zle -N globalias           # Register the function as a ZLE widget so it can be bound to a key.
 bindkey ' '  globalias     # Space      → expand alias, then insert space

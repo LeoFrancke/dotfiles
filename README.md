@@ -11,3 +11,6 @@ It handles distro detection, TTY detection, idempotent plugin installations.
 - keyboard: `kanata.kbd`
 - A bash script `install.sh`: file system, packages, symlinks
 
+## TO-DO:
+- [ ] Vim to Neovim migration
+

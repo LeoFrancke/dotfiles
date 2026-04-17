@@ -1,6 +1,9 @@
 " Leandro Francke's vimrc, 2026
 " To check for errors, type :messages
 
+" Neovim quickfix
+set runtimepath+=~/.vim
+
 " Enable modern Vim features
 " Avoid side-effects when nocompatible has already been set.
 if &compatible
@@ -93,8 +96,12 @@ if $TERM !=# "linux"
     set termguicolors
 endif
 
-colorscheme retrolegends
-source ~/.vim/colors/modifications.vim  " Fine-tuning
+if has('nvim')
+    colorscheme kanagawa-wave
+else
+    colorscheme retrolegends
+    source ~/.vim/colors/modifications.vim  " Fine-tuning
+endif
 
 " Load all config files
 " :scriptnames    -> shows loaded scripts

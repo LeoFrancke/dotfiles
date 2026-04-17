@@ -22,9 +22,13 @@ let delimitMate_nesting_quotes = ['"', "'"]
 
 
 " Color theme
-Plug 'maxmx03/retrolegends.nvim', { 'branch': 'vim' }
-let g:retrolegends_transparency = 1
-
+if has('nvim')
+    Plug 'rebelot/kanagawa.nvim' 
+else
+    Plug 'maxmx03/retrolegends.nvim', { 'branch': 'vim' }
+    let g:retrolegends_transparency = 1
+endif
+    
 " End plugin section
 call plug#end()
 

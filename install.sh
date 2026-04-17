@@ -40,7 +40,7 @@ EOF
 # 2. --- Package and Plugins installation ---
 # Determine the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed wezterm zsh gvim git curl bat lsd xdg-user-dirs fastfetch imv glow tldr #thefuck
+    sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs fastfetch imv glow tldr #thefuck
 
     # avoids error if yay not installed
     if command -v yay &>/dev/null; then
@@ -50,7 +50,7 @@ if command -v pacman &>/dev/null; then
     fi
 
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs #fastfetch thefuck
+    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs tldr #fastfetch thefuck
     
     # kanata install on ubuntu
     if ! command -v kanata &>/dev/null; then
@@ -61,7 +61,7 @@ elif command -v apt &>/dev/null; then
 
     # If using Ubuntu in a GUI, then lsd can be used.
     if [[ "$TERM" != "linux" ]]; then
-        sudo apt install -y wezterm gvim lsd imv glow tldr
+        sudo apt install -y wezterm neovim gvim lsd imv glow
     else  # tty only
         sudo apt install -y vim
     fi
@@ -112,6 +112,7 @@ ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 # 3. --- Dotfiles config ---
 DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 mkdir -pv \
+    "$HOME/.config/nvim" \
     "$HOME/.vim/config" \
     "$HOME/.vim/colors" \
     "$HOME/.vim/spell" \
@@ -126,6 +127,7 @@ ln -sfn "$DOTFILES/.wezterm.lua"                ~/.wezterm.lua
 ln -sfn "$DOTFILES/.zshrc"                      ~/.zshrc
 ln -sfn "$DOTFILES/.p10k.zsh"                   ~/.p10k.zsh
 ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
+ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.config/nvim/init.vim
 ln -sfn "$DOTFILES/.gitconfig"                  ~/.gitconfig
 ln -sfn "$DOTFILES/kanata.kbd"                  ~/.config/kanata/kanata.kbd
 ln -sfn "$DOTFILES/icons.yaml"                  ~/.config/lsd/icons.yaml
