@@ -1,3 +1,8 @@
+# Profiling zsh startup time, so it can be optimized. Run: zsh_startup
+if [[ -n "$ZSH_DEBUGRC" ]]; then
+  zmodload zsh/zprof
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -61,7 +66,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(zsh-autosuggestions zsh-completions fast-syntax-highlighting)
+plugins=(zsh-autosuggestions fast-syntax-highlighting zsh-completions)
     # git                       # only aliases and functions
     # gitfast                   # git completions
     # zsh-syntax-highlighting   # there's a better and faster plugin
@@ -84,24 +89,28 @@ export ss="$HOME/30_personal/5_screenshots"
 export music="$HOME/30_personal/7_music"
 
 # Preferred editor
-export EDITOR='vim'
+export EDITOR="vim"
 
-# Set personal aliases, for a full list, run `alias`.
-alias vimrc='$EDITOR ~/.vimrc'
-alias zshrc='$EDITOR ~/.zshrc'
-alias wez='$EDITOR ~/.wezterm.lua'
-alias zh='$EDITOR ~/.zsh_history'
+# Set personal aliases - for a full list, run `alias`.
+alias reload='source ~/.zshrc && echo "zshrc reloaded"'
+# alias dot-neovim='$EDITOR ~/...'
+alias dot-vim='$EDITOR ~/.vimrc'
+alias dot-zsh='$EDITOR ~/.zshrc'
+alias dot-wezterm='$EDITOR ~/.wezterm.lua'
+alias dot-p10k='$EDITOR ~/.p10k.zsh'
+alias dot-kanata='$EDITOR ~/.config/kanata/kanata.kbd'
+alias dot-history='$EDITOR ~/.zsh_history'
+
+# file browsing
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
 alias md='mkdir -pv'
 alias rd='rmdir -v'     # only empty dirs
 alias rm='rm -Iv'       # interactive=always + verbose
 alias mv='mv -iv'
-
-# file browsing
-# alias ..='cd ..'  # works with option 'autocd' enabled
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
 
 
 # ubuntu's binary is batcat
@@ -114,7 +123,7 @@ fi
 # if not TTY
 if [[ "$TERM" != "linux" ]]; then
     # if the target dir is ~ (home), then ignore some heavy dirs and echo msg
-    function lsd_function() {
+    function lsd_home_function() {
         # last argument, which would be the target path
         local target="${@[-1]}"     
         # if (isEmpty OR isNot a Directory) ... then change $target variable.
@@ -138,7 +147,7 @@ if [[ "$TERM" != "linux" ]]; then
 
     alias ls='lsd'
     alias lst='lsd --tree --depth 3'
-    alias la='lsd_function'
+    alias la='lsd_home_function'
     alias img='imv'
     alias zen='zen-browser'
 
@@ -208,6 +217,19 @@ bindkey ' '  globalias     # Space      → expand alias, then insert space
 bindkey '^ ' magic-space   # Ctrl+Space → insert a literal space (no expansion)
 
 
+# Profiles zsh startup time using zprof.
+# Run, then look for slow entries at the top of the report (self+calls).
+zsh_startup() {
+    echo "--- zsh startup time ---"
+    time ZSH_DEBUGRC=1 zsh -i -c exit 2>&1 | head -33
+}
+
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# zsh startup time
+if [[ -n "$ZSH_DEBUGRC" ]]; then
+  zprof
+fi
 

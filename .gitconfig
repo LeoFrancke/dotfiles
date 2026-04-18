@@ -4,6 +4,6 @@
 [credential]
 	helper = store
 [core]
-	editor = vim
+	editor = nvim
 [init]
 	defaultBranch = main

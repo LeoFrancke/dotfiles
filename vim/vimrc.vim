@@ -84,7 +84,7 @@ augroup END
 " Force Esc to be recognized instantly
 set timeout
 set ttimeout
-set timeoutlen=700      " change back to 400ms (or even 300) after building muscle memory. 
+set timeoutlen=400      " change back to 400ms (or even 300) after building muscle memory. 
 set ttimeoutlen=50
 
 

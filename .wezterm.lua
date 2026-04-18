@@ -18,7 +18,7 @@ local config = {
 
     -- Style
     default_cursor_style = "BlinkingBlock",
-    window_background_opacity = 0.95,
+    window_background_opacity = 0.91,
     window_decorations = "RESIZE",
     font_size = 14.0,
     font = wezterm.font_with_fallback({

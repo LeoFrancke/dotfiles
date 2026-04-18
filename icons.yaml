@@ -8,13 +8,15 @@ filetype:
 
 extension:
   pdf: ""
-  epub: "󱗖"  #      / 󱉟 
+  epub: "󱗖"  #     󱉟 
   md: ""    # markdown
   kbd: "󰌓"   # kanata keyboard
   
   ron: ""   # rust object notation
   bk: "󰕌"    # backup: undo symbol, intuitive
   lrc: "󰎇"   # lyrics file
+
+  zwc: ""   # zsh
 
 
 name:
@@ -31,5 +33,7 @@ name:
   trading: ""
   rmpc: ""   # music player
   7_music: ""
+
+  .zcompdump-archlinux-5.9: ""
 
 
