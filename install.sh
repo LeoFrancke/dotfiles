@@ -40,7 +40,8 @@ EOF
 # 2. --- Package and Plugins installation ---
 # Determine the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs fastfetch imv glow tldr #thefuck
+    sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs \
+        fastfetch imv glow tldr ripgrep btop #thefuck
 
     # avoids error if yay not installed
     if command -v yay &>/dev/null; then
@@ -50,7 +51,8 @@ if command -v pacman &>/dev/null; then
     fi
 
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs tldr #fastfetch thefuck
+    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs \
+        fastfetch tldr ripgrep btop #thefuck
     
     # kanata install on ubuntu
     if ! command -v kanata &>/dev/null; then
@@ -120,7 +122,9 @@ mkdir -pv \
     "$HOME/.config/rmpc/themes" \
     "$HOME/.config/glow" \
     "$HOME/.config/kanata" \
-    "$HOME/.config/systemd/user"
+    "$HOME/.config/systemd/user" \
+    "$HOME/.config/btop" \
+    "$HOME/.config/ripgrep"
 
 # symlink of main dotfiles
 ln -sfn "$DOTFILES/.wezterm.lua"                ~/.wezterm.lua
@@ -134,6 +138,8 @@ ln -sfn "$DOTFILES/icons.yaml"                  ~/.config/lsd/icons.yaml
 ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
 ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
+ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
+ln -sfn "$DOTFILES/ripgrep.conf"                ~/.config/ripgrep/ripgrep.conf
 
 # vim plug install, if not already installed
 [ ! -f ~/.vim/autoload/plug.vim ] && \

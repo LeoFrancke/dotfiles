@@ -81,13 +81,6 @@ source $ZSH/oh-my-zsh.sh
 export GOPATH="$HOME/.local/share/go"
 export PATH="$GOPATH/bin:$PATH"
 
-# Easy access for most common dirs
-export dots="$HOME/10_projects/leofrancke/dotfiles"
-export python="$HOME/10_projects/leofrancke/python_crashcourse"
-export docs="$HOME/30_personal/1_documents"
-export ss="$HOME/30_personal/5_screenshots"
-export music="$HOME/30_personal/7_music"
-
 # Preferred editor
 export EDITOR="vim"
 
@@ -112,13 +105,17 @@ alias rd='rmdir -v'     # only empty dirs
 alias rm='rm -Iv'       # interactive=always + verbose
 alias mv='mv -iv'
 
+# grep -> ripgrep
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgrep.conf"
+alias grep='rg'
 
-# ubuntu's binary is batcat
-if command -v bat &>/dev/null; then
-    alias cat='bat'
-elif command -v batcat &>/dev/null; then
-    alias cat='batcat'
-fi
+# Easy access for most common dirs
+export dots="$HOME/10_projects/leofrancke/dotfiles"
+export docs="$HOME/30_personal/1_documents"
+export python="$HOME/10_projects/leofrancke/python_crashcourse"
+export ss="$HOME/30_personal/5_screenshots"
+export music="$HOME/30_personal/7_music"
+
 
 # if not TTY
 if [[ "$TERM" != "linux" ]]; then
@@ -151,6 +148,13 @@ if [[ "$TERM" != "linux" ]]; then
     alias img='imv'
     alias zen='zen-browser'
 
+    if command -v bat &>/dev/null; then
+        alias cat='bat'
+    elif command -v batcat &>/dev/null; then
+        # ubuntu's binary is batcat
+        alias cat='batcat'
+    fi
+
     # https://github.com/nvbn/thefuck
     # eval $(thefuck --alias fk)
 else
@@ -175,7 +179,7 @@ set -o vi           # vim mode on the command line
 set -o dvorak       # Adjusts the spelling corrector's typo heuristics for Dvorak
 set -o noclobber    # Prevents file overwrite by the '>' operator
 set +o emacs        # disabled
-set +o extendedglob # Enables powerful glob operators like ^, #, ~. Off to avoid trouble
+set +o extendedglob # Enables powerful glob operators like ^, #, ~. Off to avoid issues.
 
 # Enable command-line editing in Vim
 # autoload -U edit-command-line
@@ -209,7 +213,7 @@ bindkey "^[^[" sudo-last-command    # Esc + Esc
 # Expands an alias to its full command when Space is pressed.
 function globalias() {
     zle _expand_alias      # expand the alias under the cursor
-    # zle expand-word        # expand anything else (globs, variables, etc.)
+    zle expand-word        # expand anything else (globs, variables, etc.)
     zle self-insert
 }
 zle -N globalias           # Register the function as a ZLE widget so it can be bound to a key.
