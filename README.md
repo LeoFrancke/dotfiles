@@ -22,4 +22,5 @@ Modern CLI tools replacements
 - [ ] start using Tmux
 
 - [ ] install.sh: pacman.conf; locale=en_US; keyboard layout: dvorak;
+- [ ] reinstall ly-dm via pacman
 

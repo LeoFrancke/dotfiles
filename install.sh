@@ -40,7 +40,7 @@ EOF
 # 2. --- Package and Plugins installation ---
 # Determine the right package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs \
+    sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs fzf \
         fastfetch imv glow tldr ripgrep btop #thefuck
 
     # avoids error if yay not installed
@@ -51,7 +51,7 @@ if command -v pacman &>/dev/null; then
     fi
 
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs \
+    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs fzf \
         fastfetch tldr ripgrep btop #thefuck
     
     # kanata install on ubuntu
@@ -118,28 +118,29 @@ mkdir -pv \
     "$HOME/.vim/config" \
     "$HOME/.vim/colors" \
     "$HOME/.vim/spell" \
+    "$HOME/.config/kanata" \
+    "$HOME/.config/ripgrep" \
     "$HOME/.config/lsd" \
     "$HOME/.config/rmpc/themes" \
     "$HOME/.config/glow" \
-    "$HOME/.config/kanata" \
     "$HOME/.config/systemd/user" \
-    "$HOME/.config/btop" \
-    "$HOME/.config/ripgrep"
+    "$HOME/.config/btop"
 
 # symlink of main dotfiles
 ln -sfn "$DOTFILES/.wezterm.lua"                ~/.wezterm.lua
 ln -sfn "$DOTFILES/.zshrc"                      ~/.zshrc
 ln -sfn "$DOTFILES/.p10k.zsh"                   ~/.p10k.zsh
 ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
-ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.config/nvim/init.vim
+# ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.config/nvim/init.vim
 ln -sfn "$DOTFILES/.gitconfig"                  ~/.gitconfig
 ln -sfn "$DOTFILES/kanata.kbd"                  ~/.config/kanata/kanata.kbd
-ln -sfn "$DOTFILES/icons.yaml"                  ~/.config/lsd/icons.yaml
+ln -sfn "$DOTFILES/ripgrep.conf"                ~/.config/ripgrep/ripgrep.conf
+ln -sfn "$DOTFILES/lsd/config.yaml"             ~/.config/lsd/config.yaml
+ln -sfn "$DOTFILES/lsd/icons.yaml"              ~/.config/lsd/icons.yaml
 ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
 ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
-ln -sfn "$DOTFILES/ripgrep.conf"                ~/.config/ripgrep/ripgrep.conf
 
 # vim plug install, if not already installed
 [ ! -f ~/.vim/autoload/plug.vim ] && \

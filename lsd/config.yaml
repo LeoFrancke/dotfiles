@@ -1,0 +1,29 @@
+# ~/.config/lsd/config.yaml
+
+# icons off in TTY
+icons:
+  when: auto
+
+# Use colors to differentiate file types
+color:
+  when: always
+  theme: default
+
+# Add indicators (like / for directories) to help navigation without icons
+indicators: true
+
+# Better sorting for developers
+sorting:
+  column: name
+  dir-first: true
+  version-sort: true
+
+# Clean layout
+layout: grid
+
+# How to display the date
+date: relative
+
+# Permission format (rwx or octal)
+permission: rwx
+

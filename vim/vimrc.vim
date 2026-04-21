@@ -71,6 +71,7 @@ set splitright
 
 " Restore cursor position when reopening file
 set viminfo^=%
+set viminfofile=~/.local/state/viminfo
 augroup restore_cursor
   autocmd!
   autocmd BufReadPost *

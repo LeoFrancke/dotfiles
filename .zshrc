@@ -86,6 +86,14 @@ export EDITOR="vim"
 
 # Set personal aliases - for a full list, run `alias`.
 alias reload='source ~/.zshrc && echo "zshrc reloaded"'
+alias update='omz update; yt-dlp -U; yay -Syu'      # experimental
+
+# fzf search on manual pages
+alias fman='compgen -c | fzf --header "Search manual pages" | xargs man'
+
+# this idea is good, but needs some work:
+alias dot='eval $(compgen -a | fzf --query "dot-" --header "edit dotfiles")'
+
 # alias dot-neovim='$EDITOR ~/...'
 alias dot-vim='$EDITOR ~/.vimrc'
 alias dot-zsh='$EDITOR ~/.zshrc'
@@ -101,7 +109,7 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
 alias md='mkdir -pv'
-alias rd='rmdir -v'     # only empty dirs
+alias rd='rmdir -v'
 alias rm='rm -Iv'       # interactive=always + verbose
 alias mv='mv -iv'
 
