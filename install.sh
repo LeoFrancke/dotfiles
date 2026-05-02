@@ -5,7 +5,8 @@ set -e # exit on error
 # 1. File system
 # 2. Install packages (pacman or apt) and plugins
 # 3. Dotfiles config
-# 4. Kanata installation
+# 4. Kanata config and service
+# 5. KMSCON config and service
 
 
 # 1. --- File system structure ---
@@ -41,7 +42,7 @@ EOF
 # Determine the right package manager
 if command -v pacman &>/dev/null; then
     sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs fzf \
-        fastfetch imv glow tldr ripgrep btop #thefuck
+        fastfetch imv glow tldr ripgrep btop #thefuck kmscon ttf-firacode-nerd
 
     # avoids error if yay not installed
     if command -v yay &>/dev/null; then
@@ -52,12 +53,12 @@ if command -v pacman &>/dev/null; then
 
 elif command -v apt &>/dev/null; then
     sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs fzf \
-        fastfetch tldr ripgrep btop #thefuck
+        fastfetch tldr ripgrep btop #thefuck kmscon ttf-firacode-nerd
     
     # kanata install on ubuntu
     if ! command -v kanata &>/dev/null; then
-        sudo curl -L https://github.com/jtroo/kanata/releases/latest/download/kanata -o \
-            /usr/bin/kanata
+        sudo curl -L https://github.com/jtroo/kanata/releases/latest/download/kanata \
+            -o /usr/bin/kanata
         sudo chmod +x /usr/bin/kanata
     fi
 
@@ -116,6 +117,7 @@ DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 mkdir -pv \
     "$HOME/.config/nvim" \
     "$HOME/.vim/config" \
+    "$HOME/.local/state" \
     "$HOME/.vim/colors" \
     "$HOME/.vim/spell" \
     "$HOME/.config/kanata" \
@@ -124,16 +126,18 @@ mkdir -pv \
     "$HOME/.config/rmpc/themes" \
     "$HOME/.config/glow" \
     "$HOME/.config/systemd/user" \
-    "$HOME/.config/btop"
+    "$HOME/.config/btop" \
+    "$HOME/.config/kmscon"
+
 
 # symlink of main dotfiles
 ln -sfn "$DOTFILES/.wezterm.lua"                ~/.wezterm.lua
-ln -sfn "$DOTFILES/.zshrc"                      ~/.zshrc
-ln -sfn "$DOTFILES/.p10k.zsh"                   ~/.p10k.zsh
+ln -sfn "$DOTFILES/shell/.zshrc"                ~/.zshrc
+ln -sfn "$DOTFILES/shell/.p10k.zsh"             ~/.p10k.zsh
 ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
 # ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.config/nvim/init.vim
 ln -sfn "$DOTFILES/.gitconfig"                  ~/.gitconfig
-ln -sfn "$DOTFILES/kanata.kbd"                  ~/.config/kanata/kanata.kbd
+ln -sfn "$DOTFILES/kanata/kanata.kbd"           ~/.config/kanata/kanata.kbd
 ln -sfn "$DOTFILES/ripgrep.conf"                ~/.config/ripgrep/ripgrep.conf
 ln -sfn "$DOTFILES/lsd/config.yaml"             ~/.config/lsd/config.yaml
 ln -sfn "$DOTFILES/lsd/icons.yaml"              ~/.config/lsd/icons.yaml
@@ -141,6 +145,8 @@ ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
 ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
+ln -sfn "$DOTFILES/kmscon/kmscon.conf"          ~/.config/kmscon/kmscon.conf
+echo "Dotfiles linked!"
 
 # vim plug install, if not already installed
 [ ! -f ~/.vim/autoload/plug.vim ] && \
@@ -155,7 +161,6 @@ ln -sfn "$DOTFILES/vim/config/persistent_undo.vim" ~/.vim/config/persistent_undo
 ln -sfn "$DOTFILES/vim/config/plugins.vim"         ~/.vim/config/plugins.vim
 ln -sfn "$DOTFILES/vim/config/statusline.vim"      ~/.vim/config/statusline.vim
 ln -sfn "$DOTFILES/vim/spell/en.utf-8.add"         ~/.vim/spell/en.utf-8.add
-echo "Dotfiles linked!"
 
 
 # 4. --- KANATA keyboard config and installation ---
@@ -170,22 +175,21 @@ if command -v kanata &>/dev/null; then
     # load uinput on boot
     echo "uinput" | sudo tee /etc/modules-load.d/uinput.conf > /dev/null
 
-    # service file `kanata.service`
-    cat > "$HOME/.config/systemd/user/kanata.service" <<'EOF'
-[Unit]
-Description=Kanata keyboard remapper
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/kanata --cfg %h/.config/kanata/kanata.kbd
-
-[Install]
-WantedBy=default.target
-EOF
-# EOF heredoc must be at column 0
-
+    # user service
+    cp "$DOTFILES/kanata/kanata.service" $HOME/.config/systemd/user/kanata.service
     systemctl --user daemon-reload
     systemctl --user enable kanata
-    echo "Kanata enabled. Reboot for group changes to take effect."
+    echo "Kanata service enabled. Reboot needed."
 fi
+
+
+# 5. --- KMSCON service ---
+if command -v kmscon &>/dev/null; then
+    # root service
+    sudo cp "$DOTFILES/kmscon/kmscon@tty3.service" /etc/systemd/system/kmscon@tty3.service
+    sudo systemctl daemon-reload
+    sudo systemctl enable kmscon@tty3.service
+    echo "kmscon service installed and enabled."
+fi
+
 

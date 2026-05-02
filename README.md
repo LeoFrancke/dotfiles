@@ -13,14 +13,15 @@ It handles distro detection, TTY detection, idempotent plugin installations.
 
 ## TO-DO:
 Modern CLI tools replacements
+- [ ] (priority) start using Tmux
 - [x] btop config file
 - [x] grep -> ripgrep
 - [ ] find -> fd
 - [ ] diff -> delta
 - [ ] cd -> zoxide
 - [ ] Vim to Neovim migration
-- [ ] start using Tmux
 
 - [ ] install.sh: pacman.conf; locale=en_US; keyboard layout: dvorak;
 - [ ] reinstall ly-dm via pacman
+- [ ] fix: zsh in tty loads p10k at the end of .zshrc
 

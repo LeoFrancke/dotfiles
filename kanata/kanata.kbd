@@ -1,0 +1,57 @@
+;; Summary:
+;; 1. swap: CapsLock <=> Esc
+;; 2. CapsLock hold => Ctrl
+;; 3. dead key: , (comma)
+;;      , + c    => ç
+;;      , + ...  => ão
+;;
+;; 4. q => qu
+
+(defcfg
+    ;; This makes sure that everything not in defsrc passes through normally
+    process-unmapped-keys yes
+
+    ;;sequence-timeout 400          ;; time to complete the sequence after the leader key
+    ;;sequence-input-mode visible-backspaced  ;; types the leader key, then erases it on completion
+)
+
+#|
+(defalias
+    qu (macro x f)
+)
+(deflocalkeys-linux
+    cedilha 86
+)|#
+
+;; Defines the order of keys that the deflayer entries will operate on.
+(defsrc
+    caps  esc  ;;cedilha  w (original position of , key in qwerty)
+)
+
+(deflayer base
+    ;; original CapsLock: Esc / Lctrl (on hold)
+    (tap-hold 200 200 esc lctl)
+
+    ;; original Esc is now CapsLock
+    caps
+
+    ;; testing 'ç' key
+    ;;@qu
+
+    ;;_  ;;transparent key: pass through whatever this key normally does
+)
+
+#| comment block start
+;; Declare virtual keys (the outputs)
+(defvirtualkeys
+    vk-ç (unicode ç)
+    vk-Ç (unicode Ç)
+)
+
+;; Dead key sequences
+;; Bind sequences to those virtual keys
+;; Syntax: (defseq <virtual-key-name> (<key1> <key2>))
+(defseq vk-ç (w c))
+(defseq vk-Ç (w (lsft c)))
+|#
+

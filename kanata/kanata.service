@@ -1,0 +1,9 @@
+[Unit]
+Description=Kanata keyboard remapper
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/kanata --cfg %h/.config/kanata/kanata.kbd
+
+[Install]
+WantedBy=default.target

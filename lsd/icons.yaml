@@ -17,6 +17,7 @@ extension:
   lrc: "󰎇"   # lyrics file
 
   zwc: ""   # zsh
+  service: "󰒓"
 
 
 name:

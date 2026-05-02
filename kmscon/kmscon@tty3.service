@@ -1,0 +1,23 @@
+[Unit]
+Description=KMS Term-emulator on %I
+After=systemd-user-sessions.service plymouth-quit-wait.service
+; After=rc-local.service
+
+[Service]
+; Skipping PAM authentication
+ExecStart=/usr/bin/kmscon --vt %I --login -- /bin/login -f leo
+
+; to use Authentication, replace to:
+;ExecStart=/usr/bin/kmscon --vt %I --login
+
+Restart=on-failure
+UtmpIdentifier=%I
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/%I
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+
+[Install]
+WantedBy=multi-user.target

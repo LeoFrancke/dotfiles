@@ -1,5 +1,7 @@
 vimrc
-Francke's
+francke
+leo
+leofrancke
 colorscheme
 docstring
 f-string
@@ -9,18 +11,15 @@ testability
 ve
 dotfiles
 filetype
-leofrancke's
 config
 symlinks
 tmux
-TTY
+tty
 dev
 pacman
 pdf
 ubuntu
-leo
 github
-leofrancke
 ctrl
 dir
 metadata
@@ -28,3 +27,5 @@ hashcat
 neovim
 ripgrep
 univesp
+zsh
+kmscon

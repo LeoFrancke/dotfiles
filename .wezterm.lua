@@ -23,9 +23,11 @@ local config = {
     font_size = 14.0,
     font = wezterm.font_with_fallback({
         { 
-            family = "Fira Code", weight = 400,
+            -- family = "JetBrainsMono", --weight = 400,
+            family = "Fira Code", --weight = 400,
             -- Stylistic Sets // Character Variants:
             harfbuzz_features = {
+                -- Fira Code 1234567890
                 -- 'zero',   -- Zero: dot || line
                 'cv04',      -- i: cv03..06
                 'cv14',      -- 3
@@ -40,6 +42,7 @@ local config = {
                 'ss10',      -- fi fj fl ft Fl Tl  
                 'cv31',      -- ()
                 'cv30',      -- |
+                -- 'onum',      -- 1111 2222 3333 6666 7777
             },
         },
         -- Fallback font

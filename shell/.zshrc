@@ -3,6 +3,23 @@ if [[ -n "$ZSH_DEBUGRC" ]]; then
   zmodload zsh/zprof
 fi
 
+# --- Terminal Detection ---
+if [[ -n "$KMS_START_SCRIPT" ]]; then
+    # 1. We are in KMSCON tty
+    export MY_ENV="kmscon"
+    echo $COLORTERM
+
+elif [[ "$TERM" == "linux" ]]; then
+    # 2. We are in a standard Linux TTY (getty)
+    # Use ultra-minimalist settings (No icons, 16 colors)
+    export MY_ENV="tty"
+elif [[ -n "$WAYLAND_DISPLAY" ]]; then
+    # 3. GUI - p10k theme
+    export MY_ENV="gui"
+else
+    export MY_ENV="gui"
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -14,11 +31,36 @@ fi
 export ZSH="$HOME/.oh-my-zsh"
 
 # Theme
-if [[ "$TERM" != "linux" ]]; then
+if [[ "$MY_ENV" == "tty" ]]; then
+    # TTY environment
+    ZSH_THEME="ys" # set by `omz`
+
+    # Standard Colors (Dimmer)
+    echo -en "\e]P0101010" # Black (Deep)
+    echo -en "\e]P1FF0055" # Red (Electric Cherry)
+    echo -en "\e]P200FF80" # Green (Neon Mint)
+    echo -en "\e]P3FFE000" # Yellow (Laser)
+    echo -en "\e]P40077FF" # Blue (Plasma)
+    echo -en "\e]P5FF00FF" # Magenta (Shocking Pink)
+    echo -en "\e]P600FFFF" # Cyan (Electric)
+    echo -en "\e]P7E0E0E0" # White (Silver)
+    
+    # Bright Colors (For Bold/Vibrant text)
+    echo -en "\e]P8404040" # Bright Black (Dark Grey)
+    echo -en "\e]P9FF5F5F" # Bright Red
+    echo -en "\e]PAA0FF00" # Bright Green (Lime)
+    echo -en "\e]PBFFFF00" # Bright Yellow
+    echo -en "\e]PC5F87FF" # Bright Blue
+    echo -en "\e]PDD787FF" # Bright Magenta
+    echo -en "\e]PE87FFFF" # Bright Cyan
+    echo -en "\e]PFFFFFFF" # Bright White
+    
+    clear
+elif [[ "$MY_ENV" == "kmscon" ]]; then
+    # ZSH_THEME="robbyrussell"
     ZSH_THEME="powerlevel10k/powerlevel10k"
 else
-    # TTY uses $TERM=linux
-    ZSH_THEME="ys"
+    ZSH_THEME="powerlevel10k/powerlevel10k"
 fi
 
 # Uncomment the following line to use hyphen-insensitive completion.
@@ -85,22 +127,33 @@ export PATH="$GOPATH/bin:$PATH"
 export EDITOR="vim"
 
 # Set personal aliases - for a full list, run `alias`.
-alias reload='source ~/.zshrc && echo "zshrc reloaded"'
+alias reload='source ~/.zshrc && echo "-> zsh config reloaded"'
 alias update='omz update; yt-dlp -U; yay -Syu'      # experimental
+
+# Keyboard layout toggles -- only works at TTY
+alias dvorak='echo "sudo loadkeys dvorak"; sudo loadkeys dvorak && echo "tty keyboard: Dvorak layout"'
+alias qwerty='echo "sudo loadkeys br-abnt2"; sudo loadkeys br-abnt2 && echo "tty keyboard: QWERTY layout"'
+# to change layouts in Cosmic GUI: l.alt + shift
+
+# Start kmscon service at tty3.
+# PS: tty3 needs to be masked to avoid conflict (getty x kmscon)
+#     sudo systemctl mask getty@tty3.service
+# To get standard terminal back, unmask it.
+alias focus-mode='sudo systemctl restart kmscon@tty3.service && chvt 3'
 
 # fzf search on manual pages
 alias fman='compgen -c | fzf --header "Search manual pages" | xargs man'
 
 # this idea is good, but needs some work:
-alias dot='eval $(compgen -a | fzf --query "dot-" --header "edit dotfiles")'
+# alias dot='eval $(compgen -a | fzf --query "dot-" --header "edit dotfiles")'
 
-# alias dot-neovim='$EDITOR ~/...'
-alias dot-vim='$EDITOR ~/.vimrc'
-alias dot-zsh='$EDITOR ~/.zshrc'
-alias dot-wezterm='$EDITOR ~/.wezterm.lua'
-alias dot-p10k='$EDITOR ~/.p10k.zsh'
-alias dot-kanata='$EDITOR ~/.config/kanata/kanata.kbd'
-alias dot-history='$EDITOR ~/.zsh_history'
+# alias dotnvim='$EDITOR ~/...'
+alias dot.vim='$EDITOR ~/.vimrc'
+alias dot.zsh='$EDITOR ~/.zshrc'
+alias dot.wezterm='$EDITOR ~/.wezterm.lua'
+alias dot.p10k='$EDITOR ~/.p10k.zsh'
+alias dot.kanata='$EDITOR ~/.config/kanata/kanata.kbd'
+alias dot.history='$EDITOR ~/.zsh_history'
 
 # file browsing
 alias ..='cd ..'
@@ -108,10 +161,10 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
-alias md='mkdir -pv'
+alias md='mkdir --parents --verbose'
 alias rd='rmdir -v'
-alias rm='rm -Iv'       # interactive=always + verbose
-alias mv='mv -iv'
+alias rm='rm --interactive=once -v'
+alias mv='mv --interactive -v'
 
 # grep -> ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgrep.conf"
@@ -238,7 +291,9 @@ zsh_startup() {
 
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+if [[ "$MY_ENV" != "tty" ]]; then
+    [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+fi
 
 # zsh startup time
 if [[ -n "$ZSH_DEBUGRC" ]]; then
