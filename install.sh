@@ -52,8 +52,8 @@ if command -v pacman &>/dev/null; then
     fi
 
 elif command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y zsh git curl bat xdg-user-dirs fzf \
-        fastfetch tldr ripgrep btop #thefuck kmscon ttf-firacode-nerd
+    sudo apt update && sudo apt install -y zsh neovim git curl bat lsd xdg-user-dirs fzf \
+        fastfetch tldr ripgrep btop kmscon #thefuck 
     
     # kanata install on ubuntu
     if ! command -v kanata &>/dev/null; then
@@ -62,9 +62,9 @@ elif command -v apt &>/dev/null; then
         sudo chmod +x /usr/bin/kanata
     fi
 
-    # If using Ubuntu in a GUI, then lsd can be used.
-    if [[ "$TERM" != "linux" ]]; then
-        sudo apt install -y wezterm neovim gvim lsd imv glow
+    # If using Ubuntu in a GUI
+    if [[ "$TERM" == "gui" ]]; then
+        sudo apt install -y wezterm gvim imv glow
     else  # tty only
         sudo apt install -y vim
     fi
