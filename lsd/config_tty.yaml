@@ -1,8 +1,8 @@
-# ~/.config/lsd/config.yaml
+# ~/.config/lsd/config_tty.yaml
 
 # icons off in TTY
 icons:
-  when: always
+  when: never
 
 # Use colors to differentiate file types
 color:
@@ -10,7 +10,7 @@ color:
   theme: default
 
 # Add indicators (like / for directories) to help navigation without icons
-indicators: false
+indicators: true
 
 sorting:
   column: name

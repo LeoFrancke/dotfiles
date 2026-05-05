@@ -188,7 +188,7 @@ if command -v kmscon &>/dev/null; then
     # root service
     sudo cp "$DOTFILES/kmscon/kmscon@tty3.service" /etc/systemd/system/kmscon@tty3.service
     sudo systemctl daemon-reload
-    sudo systemctl enable kmscon@tty3.service
+    # sudo systemctl enable kmscon@tty3.service
     echo "kmscon service installed and enabled."
 fi
 

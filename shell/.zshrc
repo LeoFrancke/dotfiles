@@ -3,11 +3,16 @@ if [[ -n "$ZSH_DEBUGRC" ]]; then
   zmodload zsh/zprof
 fi
 
+
+# default theme
+export P10K="$HOME/.p10k.zsh"
+
 # --- Terminal Detection ---
-if [[ -n "$KMS_START_SCRIPT" ]]; then
+if [[ "$COLORTERM" == "kmscon" ]]; then
     # 1. We are in KMSCON tty
     export MY_ENV="kmscon"
-    echo $COLORTERM
+    export P10K="$HOME/10_projects/leofrancke/dotfiles/shell/.p10k_kmscon.zsh"
+    export TERM=xterm-256color
 
 elif [[ "$TERM" == "linux" ]]; then
     # 2. We are in a standard Linux TTY (getty)
@@ -32,8 +37,8 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # Theme
 if [[ "$MY_ENV" == "tty" ]]; then
-    # TTY environment
-    ZSH_THEME="ys" # set by `omz`
+    # TTY environment: 'ys' theme
+    ZSH_THEME="ys"
 
     # Standard Colors (Dimmer)
     echo -en "\e]P0101010" # Black (Deep)
@@ -56,9 +61,8 @@ if [[ "$MY_ENV" == "tty" ]]; then
     echo -en "\e]PFFFFFFF" # Bright White
     
     clear
-elif [[ "$MY_ENV" == "kmscon" ]]; then
-    # ZSH_THEME="robbyrussell"
-    ZSH_THEME="powerlevel10k/powerlevel10k"
+# elif [[ "$MY_ENV" == "kmscon" ]]; then
+#     ZSH_THEME="powerlevel10k/powerlevel10k"
 else
     ZSH_THEME="powerlevel10k/powerlevel10k"
 fi
@@ -151,7 +155,7 @@ alias fman='compgen -c | fzf --header "Search manual pages" | xargs man'
 alias dot.vim='$EDITOR ~/.vimrc'
 alias dot.zsh='$EDITOR ~/.zshrc'
 alias dot.wezterm='$EDITOR ~/.wezterm.lua'
-alias dot.p10k='$EDITOR ~/.p10k.zsh'
+alias dot.p10k='$EDITOR $P10K'
 alias dot.kanata='$EDITOR ~/.config/kanata/kanata.kbd'
 alias dot.history='$EDITOR ~/.zsh_history'
 
@@ -168,7 +172,7 @@ alias mv='mv --interactive -v'
 
 # grep -> ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgrep.conf"
-alias grep='rg'
+alias grep='rg'     # config: search hidden files; smart-case
 
 # Easy access for most common dirs
 export dots="$HOME/10_projects/leofrancke/dotfiles"
@@ -196,8 +200,8 @@ if [[ "$TERM" != "linux" ]]; then
             local extra_msg="\n  (hidden dirs: .local .cache .zen .vscode)"
         fi
 
-        lsd -lAh --sort=time --reverse --total-size --header \
-            --date '+%Y %b %d %H:%M' \
+        lsd -lAh --reverse --total-size --header \
+            # --sort=time --date '+%Y %b %d %H:%M' \
             "${extra_flags[@]}" "$@"  # $@ allows all arguments passed to the function to be sent to lsd.
 
         [[ -z "$extra_msg" ]] || echo -e "$extra_msg"  # print msg only if Not empty
@@ -290,9 +294,20 @@ zsh_startup() {
 }
 
 
+# Welcome message
+if [[ ! -f /tmp/daily_fortune ]]; then
+    touch /tmp/daily_fortune
+    date
+    fortune | lolcat -f
+    echo " "
+    echo "Pending updates: $(checkupdates 2>/dev/null | wc -l)"
+    echo " "
+fi
+
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 if [[ "$MY_ENV" != "tty" ]]; then
-    [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+    [[ ! -f "$P10K" ]] || source "$P10K"
 fi
 
 # zsh startup time

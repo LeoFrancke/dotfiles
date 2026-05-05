@@ -24,7 +24,7 @@ local config = {
     font = wezterm.font_with_fallback({
         { 
             -- family = "JetBrainsMono", --weight = 400,
-            family = "Fira Code", --weight = 400,
+            family = "Fira Code Nerd Font", --weight = 400,
             -- Stylistic Sets // Character Variants:
             harfbuzz_features = {
                 -- Fira Code 1234567890
