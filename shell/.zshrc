@@ -253,7 +253,7 @@ set +o extendedglob # Enables powerful glob operators like ^, #, ~. Off to avoid
 
 # --- key-bindings ---
 # Dvorak-friendly navigation (mimicking custom Vim htsn)
-if [[ "$MY_ENV" == "kmscon" ]]; then
+if [[ "$MY_ENV" != "kmscon" ]]; then
     bindkey '^h' backward-char       # Ctrl + h (Dvorak h, QWERTY j) for left
 fi
 bindkey '^t' down-history        # Ctrl + t (Dvorak t, QWERTY k) for down (next history)
