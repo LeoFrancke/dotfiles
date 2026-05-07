@@ -8,11 +8,10 @@ fi
 export P10K="$HOME/.p10k.zsh"
 
 # --- Terminal Detection ---
-if [[ "$COLORTERM" == "kmscon" ]]; then
+if [[ "$COLORTERM" == "kmscon" || "$TERM" == "xterm-256color" ]]; then
     # 1. We are in KMSCON tty
     export MY_ENV="kmscon"
     export P10K="$HOME/10_projects/leofrancke/dotfiles/shell/.p10k_kmscon.zsh"
-    export TERM=xterm-256color
 
 elif [[ "$TERM" == "linux" ]]; then
     # 2. We are in a standard Linux TTY (getty)
@@ -254,7 +253,9 @@ set +o extendedglob # Enables powerful glob operators like ^, #, ~. Off to avoid
 
 # --- key-bindings ---
 # Dvorak-friendly navigation (mimicking custom Vim htsn)
-bindkey '^h' backward-char       # Ctrl + h (Dvorak h, QWERTY j) for left
+if [[ "$MY_ENV" == "kmscon" ]]; then
+    bindkey '^h' backward-char       # Ctrl + h (Dvorak h, QWERTY j) for left
+fi
 bindkey '^t' down-history        # Ctrl + t (Dvorak t, QWERTY k) for down (next history)
 bindkey '^n' up-history          # Ctrl + n (Dvorak n, QWERTY l) for up (previous history)
 bindkey '^s' forward-char        # Ctrl + s (Dvorak s, QWERTY semicolon) for right
