@@ -6,12 +6,13 @@ fi
 
 # default theme
 export P10K="$HOME/.p10k.zsh"
+export DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 
 # --- Terminal Detection ---
-if [[ "$COLORTERM" == "kmscon" || "$TERM" == "xterm-256color" ]]; then
+if [[ "$COLORTERM" == "kmscon" || ("$TERM" == "xterm-256color" && ! -n "$WAYLAND_DISPLAY") ]]; then
     # 1. We are in KMSCON tty
     export MY_ENV="kmscon"
-    export P10K="$HOME/10_projects/leofrancke/dotfiles/shell/.p10k_kmscon.zsh"
+    export P10K="$DOTFILES/shell/.p10k_kmscon.zsh"
 
 elif [[ "$TERM" == "linux" ]]; then
     # 2. We are in a standard Linux TTY (getty)
@@ -122,118 +123,19 @@ source $ZSH/oh-my-zsh.sh
 
 
 # --- USER CONFIGURATION ---
-# Go language path (different than default)
-export GOPATH="$HOME/.local/share/go"
-export PATH="$GOPATH/bin:$PATH"
-
-# Preferred editor
-export EDITOR="vim"
-
-# Set personal aliases - for a full list, run `alias`.
-alias reload='source ~/.zshrc && echo "-> zsh config reloaded"'
-alias update='omz update; yt-dlp -U; yay -Syu'      # experimental
-
-# Keyboard layout toggles -- only works at TTY
-alias dvorak='echo "sudo loadkeys dvorak"; sudo loadkeys dvorak && echo "tty keyboard: Dvorak layout"'
-alias qwerty='echo "sudo loadkeys br-abnt2"; sudo loadkeys br-abnt2 && echo "tty keyboard: QWERTY layout"'
-# to change layouts in Cosmic GUI: l.alt + shift
-
-# Start kmscon service at tty3.
-# PS: tty3 needs to be masked to avoid conflict (getty x kmscon)
-#     sudo systemctl mask getty@tty3.service
-# To get standard terminal back, unmask it.
-alias focus-mode='sudo systemctl restart kmscon@tty3.service && chvt 3'
-
-# fzf search on manual pages
-alias fman='compgen -c | fzf --header "Search manual pages" | xargs man'
-
-# this idea is good, but needs some work:
-# alias dot='eval $(compgen -a | fzf --query "dot-" --header "edit dotfiles")'
-
-# alias dotnvim='$EDITOR ~/...'
-alias dot.vim='$EDITOR ~/.vimrc'
-alias dot.zsh='$EDITOR ~/.zshrc'
-alias dot.wezterm='$EDITOR ~/.wezterm.lua'
-alias dot.p10k='$EDITOR $P10K'
-alias dot.kanata='$EDITOR ~/.config/kanata/kanata.kbd'
-alias dot.history='$EDITOR ~/.zsh_history'
-
-# file browsing
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-
-alias md='mkdir --parents --verbose'
-alias rd='rmdir -v'
-alias rm='rm --interactive=once -v'
-alias mv='mv --interactive -v'
-
-# grep -> ripgrep
-export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgrep.conf"
-alias grep='rg'     # config: search hidden files; smart-case
-
-# Easy access for most common dirs
-export dots="$HOME/10_projects/leofrancke/dotfiles"
-export docs="$HOME/30_personal/1_documents"
-export python="$HOME/10_projects/leofrancke/python_crashcourse"
-export ss="$HOME/30_personal/5_screenshots"
-export music="$HOME/30_personal/7_music"
+# aliases
+source "$DOTFILES/shell/zsh_aliases"
 
 
-# if not TTY
-if [[ "$TERM" != "linux" ]]; then
-    # if the target dir is ~ (home), then ignore some heavy dirs and echo msg
-    function lsd_home_function() {
-        # last argument, which would be the target path
-        local target="${@[-1]}"     
-        # if (isEmpty OR isNot a Directory) ... then change $target variable.
-        [[ -z "$target" || ! -d "$target" ]] && target="$PWD"
-
-        local -a extra_flags    # array definition
-        if [[ "$target" == "$HOME" ]]; then
-            extra_flags=(
-                --ignore-glob=".local" --ignore-glob=".cache"
-                --ignore-glob=".zen" --ignore-glob=".vscode"
-            )
-            local extra_msg="\n  (hidden dirs: .local .cache .zen .vscode)"
-        fi
-
-        lsd -lAh --reverse --total-size --header \
-            # --sort=time --date '+%Y %b %d %H:%M' \
-            "${extra_flags[@]}" "$@"  # $@ allows all arguments passed to the function to be sent to lsd.
-
-        [[ -z "$extra_msg" ]] || echo -e "$extra_msg"  # print msg only if Not empty
-    }
-
-    alias ls='lsd'
-    alias lst='lsd --tree --depth 3'
-    alias la='lsd_home_function'
-    alias img='imv'
-    alias zen='zen-browser'
-
-    if command -v bat &>/dev/null; then
-        alias cat='bat'
-    elif command -v batcat &>/dev/null; then
-        # ubuntu's binary is batcat
-        alias cat='batcat'
-    fi
-
-    # https://github.com/nvbn/thefuck
-    # eval $(thefuck --alias fk)
-else
-    # TTY doesn't support lsd/nerd-fonts, so use ls
-    alias la='ls -lAh --sort=time --reverse --color=tty'
-
+if [[ "$TERM" == "linux" ]]; then
     # autocomplete on tty
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=yellow'
 fi
 
-
 # Highlight style
 FAST_HIGHLIGHT_STYLES[command]='fg=green,bold'
-FAST_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
-FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+# FAST_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
+# FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
 
 # Remove bold from executable files / dirs are still bold.
 LS_COLORS="${LS_COLORS}:ex=32"
@@ -254,6 +156,7 @@ set +o extendedglob # Enables powerful glob operators like ^, #, ~. Off to avoid
 # --- key-bindings ---
 # Dvorak-friendly navigation (mimicking custom Vim htsn)
 if [[ "$MY_ENV" != "kmscon" ]]; then
+    # avoid conflict within kmscon (backspace key = ^H)
     bindkey '^h' backward-char       # Ctrl + h (Dvorak h, QWERTY j) for left
 fi
 bindkey '^t' down-history        # Ctrl + t (Dvorak t, QWERTY k) for down (next history)
@@ -298,7 +201,6 @@ zsh_startup() {
 # Welcome message
 if [[ ! -f /tmp/daily_fortune ]]; then
     touch /tmp/daily_fortune
-    date
     fortune | lolcat -f
     echo " "
     echo "Pending updates: $(checkupdates 2>/dev/null | wc -l)"
