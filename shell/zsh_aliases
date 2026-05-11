@@ -9,7 +9,7 @@ export EDITOR="vim"
 
 # Set personal aliases - for a full list, run `alias`.
 alias reload='source ~/.zshrc && echo "-> zsh config reloaded"'
-alias update='omz update; yt-dlp -U; yay -Syu --no-confirm'      # experimental
+alias update='omz update; yay -Syu'      # experimental   # yt-dlp -U; 
 
 # Keyboard layout toggles -- only works at TTY
 alias dvorak='echo "sudo loadkeys dvorak"; sudo loadkeys dvorak && echo "tty keyboard: Dvorak layout"'
