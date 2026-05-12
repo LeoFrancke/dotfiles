@@ -20,7 +20,8 @@ alias qwerty='echo "sudo loadkeys br-abnt2"; sudo loadkeys br-abnt2 && echo "tty
 # PS: tty3 needs to be masked to avoid conflict (getty x kmscon)
 #     sudo systemctl mask getty@tty3.service
 # To get standard terminal back, unmask it.
-alias focus-mode='sudo systemctl restart kmscon@tty3.service && chvt 3'
+# alias focus-mode='sudo systemctl restart kmscon@tty3.service && chvt 3'
+alias focus-mode='sudo kmscon'
 
 # fzf search on manual pages
 alias fman='compgen -c | fzf --header "Search manual pages" | xargs man'

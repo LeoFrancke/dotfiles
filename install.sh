@@ -145,7 +145,8 @@ ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
 ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
-ln -sfn "$DOTFILES/kmscon/kmscon.conf"          ~/.config/kmscon/kmscon.conf
+# ln -sfn "$DOTFILES/kmscon/kmscon.conf"          ~/.config/kmscon/kmscon.conf
+sudo ln -sfn "$DOTFILES/kmscon/kmscon.conf"     /etc/kmscon/kmscon.conf
 echo "Dotfiles linked!"
 
 # vim plug install, if not already installed
@@ -189,7 +190,7 @@ if command -v kmscon &>/dev/null; then
     sudo cp "$DOTFILES/kmscon/kmscon@tty3.service" /etc/systemd/system/kmscon@tty3.service
     sudo systemctl daemon-reload
     # sudo systemctl enable kmscon@tty3.service
-    echo "kmscon service installed and enabled."
+    echo "kmscon service installed. But not enabled."
 fi
 
 
