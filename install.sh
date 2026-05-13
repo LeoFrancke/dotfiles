@@ -145,7 +145,6 @@ ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
 ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
-# ln -sfn "$DOTFILES/kmscon/kmscon.conf"          ~/.config/kmscon/kmscon.conf
 sudo ln -sfn "$DOTFILES/kmscon/kmscon.conf"     /etc/kmscon/kmscon.conf
 echo "Dotfiles linked!"
 

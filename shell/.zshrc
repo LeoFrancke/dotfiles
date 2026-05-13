@@ -201,8 +201,8 @@ zsh_startup() {
 # Welcome message
 if [[ ! -f /tmp/daily_fortune ]]; then
     touch /tmp/daily_fortune
-    fortune | lolcat -f
-    echo " "
+    # fortune | lolcat -f
+    # echo " "
     echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
     echo " "
 fi
