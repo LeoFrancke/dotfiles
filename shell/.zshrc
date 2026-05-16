@@ -13,6 +13,7 @@ if [[ "$COLORTERM" == "kmscon" || ("$TERM" == "xterm-256color" && ! -n "$WAYLAND
     # 1. We are in KMSCON tty
     export MY_ENV="kmscon"
     export P10K="$DOTFILES/shell/.p10k_kmscon.zsh"
+    export TERM='xterm-256color'
 
 elif [[ "$TERM" == "linux" ]]; then
     # 2. We are in a standard Linux TTY (getty)
