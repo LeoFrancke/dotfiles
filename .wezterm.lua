@@ -1,4 +1,13 @@
 local wezterm = require 'wezterm'
+
+-- OS font name fix
+if wezterm.target_triple:find("linux") then
+    main_font = "Fira Code Nerd Font" --weight = 400,
+else
+    -- Windows
+    main_font = "FiraCode Nerd Font"
+end
+
 local config = {
     -- Keybindings
     keys = {
@@ -13,7 +22,6 @@ local config = {
 
         -- Navigation
         -- to-do
-
     },
 
     -- Style
@@ -23,8 +31,8 @@ local config = {
     font_size = 14.0,
     font = wezterm.font_with_fallback({
         { 
-            -- family = "JetBrainsMono", --weight = 400,
-            family = "Fira Code Nerd Font", --weight = 400,
+            family = main_font,
+
             -- Stylistic Sets // Character Variants:
             harfbuzz_features = {
                 -- Fira Code 1234567890
