@@ -9,18 +9,12 @@ export P10K="$HOME/.p10k.zsh"
 export DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 
 # --- Terminal Detection ---
-if [[ "$COLORTERM" == "kmscon" || ("$TERM" == "xterm-256color" && ! -n "$WAYLAND_DISPLAY") ]]; then
-    # 1. We are in KMSCON tty
-    export MY_ENV="kmscon"
-    export P10K="$DOTFILES/shell/.p10k_kmscon.zsh"
-    export TERM='xterm-256color'
-
-elif [[ "$TERM" == "linux" ]]; then
-    # 2. We are in a standard Linux TTY (getty)
-    # Use ultra-minimalist settings (No icons, 16 colors)
+if [[ "$TERM" == "linux" ]]; then
+    # 1. We are in a standard Linux TTY (getty)
+    # Use ultra-minimalist settings
     export MY_ENV="tty"
 elif [[ -n "$WAYLAND_DISPLAY" ]]; then
-    # 3. GUI - p10k theme
+    # 2. GUI - p10k theme
     export MY_ENV="gui"
 else
     export MY_ENV="gui"
@@ -37,7 +31,9 @@ fi
 export ZSH="$HOME/.oh-my-zsh"
 
 # Theme
-if [[ "$MY_ENV" == "tty" ]]; then
+if [[ "$MY_ENV" == "gui" ]]; then
+    ZSH_THEME="powerlevel10k/powerlevel10k"
+elif [[ "$MY_ENV" == "tty" ]]; then
     # TTY environment: 'ys' theme
     ZSH_THEME="ys"
 
@@ -62,10 +58,6 @@ if [[ "$MY_ENV" == "tty" ]]; then
     echo -en "\e]PFFFFFFF" # Bright White
     
     clear
-# elif [[ "$MY_ENV" == "kmscon" ]]; then
-#     ZSH_THEME="powerlevel10k/powerlevel10k"
-else
-    ZSH_THEME="powerlevel10k/powerlevel10k"
 fi
 
 # Uncomment the following line to use hyphen-insensitive completion.
@@ -156,10 +148,6 @@ set +o extendedglob # Enables powerful glob operators like ^, #, ~. Off to avoid
 
 # --- key-bindings ---
 # Dvorak-friendly navigation (mimicking custom Vim htsn)
-if [[ "$MY_ENV" != "kmscon" ]]; then
-    # avoid conflict within kmscon (backspace key = ^H)
-    bindkey '^h' backward-char       # Ctrl + h (Dvorak h, QWERTY j) for left
-fi
 bindkey '^t' down-history        # Ctrl + t (Dvorak t, QWERTY k) for down (next history)
 bindkey '^n' up-history          # Ctrl + n (Dvorak n, QWERTY l) for up (previous history)
 bindkey '^s' forward-char        # Ctrl + s (Dvorak s, QWERTY semicolon) for right
@@ -203,9 +191,9 @@ zsh_startup() {
 if [[ ! -f /tmp/daily_fortune ]]; then
     touch /tmp/daily_fortune
     # fortune | lolcat -f
-    # echo " "
-    # echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
-    # echo " "
+    echo " "
+    echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
+    echo " "
 fi
 
 

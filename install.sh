@@ -6,7 +6,6 @@ set -e # exit on error
 # 2. Install packages (pacman or apt) and plugins
 # 3. Dotfiles config
 # 4. Kanata config and service
-# 5. KMSCON config and service
 
 
 # 1. --- File system structure ---
@@ -42,7 +41,7 @@ EOF
 # Determine the right package manager
 if command -v pacman &>/dev/null; then
     sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs fzf \
-        fastfetch imv glow tldr ripgrep btop #thefuck kmscon ttf-firacode-nerd
+        fastfetch imv glow tldr ripgrep btop #thefuck ttf-firacode-nerd
 
     # avoids error if yay not installed
     if command -v yay &>/dev/null; then
@@ -51,6 +50,7 @@ if command -v pacman &>/dev/null; then
         echo "yay not found! Install it manually, then run this script again."
     fi
 
+# in case of Ubuntu
 elif command -v apt &>/dev/null; then
     sudo apt update && sudo apt install -y zsh neovim git curl bat lsd xdg-user-dirs fzf \
         fastfetch tldr ripgrep btop kmscon #thefuck 
@@ -126,8 +126,7 @@ mkdir -pv \
     "$HOME/.config/rmpc/themes" \
     "$HOME/.config/glow" \
     "$HOME/.config/systemd/user" \
-    "$HOME/.config/btop" \
-    "$HOME/.config/kmscon"
+    "$HOME/.config/btop"
 
 
 # symlink of main dotfiles
@@ -145,8 +144,6 @@ ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
 ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
-sudo mkdir "/etc/kmscon/"
-sudo ln -sfn "$DOTFILES/kmscon/kmscon.conf"     /etc/kmscon/kmscon.conf
 echo "Dotfiles linked!"
 
 # vim plug install, if not already installed
@@ -182,15 +179,4 @@ if command -v kanata &>/dev/null; then
     systemctl --user enable kanata
     echo "Kanata service enabled. Reboot needed."
 fi
-
-
-# 5. --- KMSCON service ---
-if command -v kmscon &>/dev/null; then
-    # root service
-    sudo cp "$DOTFILES/kmscon/kmscon@tty3.service" /etc/systemd/system/kmscon@tty3.service
-    sudo systemctl daemon-reload
-    # sudo systemctl enable kmscon@tty3.service
-    echo "kmscon service installed. But not enabled."
-fi
-
 

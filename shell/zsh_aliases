@@ -8,28 +8,22 @@ export PATH="$GOPATH/bin:$PATH"
 export EDITOR="vim"
 
 # Set personal aliases - for a full list, run `alias`.
+# basics:
 alias reload='source ~/.zshrc && echo "-> zsh config reloaded"'
 alias update='omz update; yay -Syu'      # experimental   # yt-dlp -U; 
+# fzf search on manual pages
+alias fman='compgen -c | fzf --header "Search manual pages" | xargs man'
 
 # Keyboard layout toggles -- only works at TTY
 alias dvorak='echo "sudo loadkeys dvorak"; sudo loadkeys dvorak && echo "tty keyboard: Dvorak layout"'
 alias qwerty='echo "sudo loadkeys br-abnt2"; sudo loadkeys br-abnt2 && echo "tty keyboard: QWERTY layout"'
 # to change layouts in Cosmic GUI: l.alt + shift
 
-# Start kmscon service at tty3.
-# PS: tty3 needs to be masked to avoid conflict (getty x kmscon)
-#     sudo systemctl mask getty@tty3.service
-# To get standard terminal back, unmask it.
-# alias focus-mode='sudo systemctl restart kmscon@tty3.service && chvt 3'
-alias focus-mode='sudo kmscon'
-
-# fzf search on manual pages
-alias fman='compgen -c | fzf --header "Search manual pages" | xargs man'
 
 # this idea is good, but needs some work:
-# alias dot='eval $(compgen -a | fzf --query "dot-" --header "edit dotfiles")'
+# alias dot='eval $(compgen -a | fzf --query "dot." --header "edit dotfiles")'
 
-# alias dotnvim='$EDITOR ~/...'
+# alias dot.nvim='$EDITOR ~/...'
 alias dot.vim='$EDITOR ~/.vimrc'
 alias dot.zsh='$EDITOR ~/.zshrc'
 alias dot.wezterm='$EDITOR ~/.wezterm.lua'
@@ -60,8 +54,14 @@ export ss="$HOME/30_personal/5_screenshots"
 export music="$HOME/30_personal/7_music"
 
 
-# if not TTY
-if [[ "$TERM" != "linux" ]]; then
+# GUI aliases
+# if TTY:
+if [[ "$TERM" == "linux" ]]; then
+    # TTY doesn't support lsd/nerd-fonts, so use ls
+    alias la='ls -lAh --sort=time --reverse --color=tty'
+
+# else if GUI:
+else
     # if the target dir is ~ (home), then ignore some heavy dirs and echo msg
     function lsd_home_function() {
         # last argument, which would be the target path
@@ -78,8 +78,8 @@ if [[ "$TERM" != "linux" ]]; then
             local extra_msg="\n  (hidden dirs: .local .cache .zen .vscode)"
         fi
 
+        # lsd -lAh --header --sort=time --date '+%Y %b %d %H:%M' \
         lsd -lAh --reverse --total-size --header \
-            # --sort=time --date '+%Y %b %d %H:%M' \
             "${extra_flags[@]}" "$@"  # $@ allows all arguments passed to the function to be sent to lsd.
 
         [[ -z "$extra_msg" ]] || echo -e "$extra_msg"  # print msg only if Not empty
@@ -100,9 +100,5 @@ if [[ "$TERM" != "linux" ]]; then
 
     # https://github.com/nvbn/thefuck
     # eval $(thefuck --alias fk)
-else
-    # TTY doesn't support lsd/nerd-fonts, so use ls
-    alias la='ls -lAh --sort=time --reverse --color=tty'
-
 fi
 
