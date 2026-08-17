@@ -14,6 +14,9 @@ alias update='omz update; yay -Syu'      # experimental   # yt-dlp -U;
 # fzf search on manual pages
 alias fman='compgen -c | fzf --header "Search manual pages" | xargs man'
 
+# C++ new standard + warnings for building good habits
+alias g++='g++ -std=c++23 -Wall -Wextra -Wpedantic'
+
 # Keyboard layout toggles -- only works at TTY
 alias dvorak='echo "sudo loadkeys dvorak"; sudo loadkeys dvorak && echo "tty keyboard: Dvorak layout"'
 alias qwerty='echo "sudo loadkeys br-abnt2"; sudo loadkeys br-abnt2 && echo "tty keyboard: QWERTY layout"'

@@ -194,6 +194,9 @@ if [[ ! -f /tmp/daily_fortune ]]; then
     echo " "
     echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
     echo " "
+    cat todo_today.md
+    echo "check: ~/10_projects/00_roadmap/current_week.md"
+    echo " "
 fi
 
 
