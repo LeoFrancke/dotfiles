@@ -1,11 +1,19 @@
 local wezterm = require 'wezterm'
+local is_windows = wezterm.target_triple:find("windows") ~= nil
 
--- OS font name fix
-if wezterm.target_triple:find("linux") then
-    main_font = "Fira Code Nerd Font" --weight = 400,
+-- fix Linux/Windows font name difference
+local primary_font
+if is_windows then
+    primary_font = "FiraCode Nerd Font"
 else
-    -- Windows
-    main_font = "FiraCode Nerd Font"
+    primary_font = "Fira Code Nerd Font"
+end
+
+-- If Windows, default to WSL
+local default_prog = nil
+if is_windows then
+    default_prog = { "powershell.exe", "-NoLogo" }
+    --default_prog = { "wsl.exe", "-d", "archlinux", "~" }
 end
 
 local config = {
@@ -31,7 +39,7 @@ local config = {
     font_size = 14.0,
     font = wezterm.font_with_fallback({
         { 
-            family = main_font,
+            family = primary_font,
 
             -- Stylistic Sets // Character Variants:
             harfbuzz_features = {
