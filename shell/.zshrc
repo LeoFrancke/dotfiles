@@ -13,10 +13,13 @@ if [[ "$TERM" == "linux" ]]; then
     # 1. We are in a standard Linux TTY (getty)
     # Use ultra-minimalist settings
     export MY_ENV="tty"
+
 elif [[ -n "$WAYLAND_DISPLAY" ]]; then
     # 2. GUI - p10k theme
     export MY_ENV="gui"
+
 else
+    # 3. Everything else, including WSL (windows)
     export MY_ENV="gui"
 fi
 

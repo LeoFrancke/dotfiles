@@ -43,6 +43,10 @@ if command -v pacman &>/dev/null; then
     sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs fzf \
         fastfetch imv glow tldr ripgrep btop #thefuck ttf-firacode-nerd
 
+    ### add a WSL check 
+    # remove: gui apps and kanata
+    #
+
     # avoids error if yay not installed
     if command -v yay &>/dev/null; then
         yay -S --needed kanata-bin
@@ -53,7 +57,7 @@ if command -v pacman &>/dev/null; then
 # in case of Ubuntu
 elif command -v apt &>/dev/null; then
     sudo apt update && sudo apt install -y zsh neovim git curl bat lsd xdg-user-dirs fzf \
-        fastfetch tldr ripgrep btop kmscon #thefuck 
+        fastfetch tldr ripgrep btop #thefuck 
     
     # kanata install on ubuntu
     if ! command -v kanata &>/dev/null; then
