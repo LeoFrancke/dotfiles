@@ -7,6 +7,9 @@ set -e # exit on error
 # 3. Dotfiles config
 # 4. Kanata config and service
 
+# Helper functions
+is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
+has_cmd() { command -v "$1" &>/dev/null; }
 
 # 1. --- File system structure ---
 mkdir -pv \
@@ -38,8 +41,20 @@ EOF
 
 
 # 2. --- Package and Plugins installation ---
+## 2.1 Package list
+#  shared across all environments
+cli_packages=(
+    zsh neovim neovim vim git curl bat lsd ripgrep \
+    tldr fastfetch glow btop xdg-user-dirs ttf-firacode-nerd
+)
+
+# wezterm imv
+
+
+
+
 # Determine the right package manager
-if command -v pacman &>/dev/null; then
+if has_cmd pacman; then
     sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs fzf \
         fastfetch imv glow tldr ripgrep btop #thefuck ttf-firacode-nerd
 
@@ -48,19 +63,19 @@ if command -v pacman &>/dev/null; then
     #
 
     # avoids error if yay not installed
-    if command -v yay &>/dev/null; then
+    if has_cmd yay; then
         yay -S --needed kanata-bin
     else
         echo "yay not found! Install it manually, then run this script again."
     fi
 
 # in case of Ubuntu
-elif command -v apt &>/dev/null; then
+elif has_cmd apt; then
     sudo apt update && sudo apt install -y zsh neovim git curl bat lsd xdg-user-dirs fzf \
         fastfetch tldr ripgrep btop #thefuck 
     
     # kanata install on ubuntu
-    if ! command -v kanata &>/dev/null; then
+    if ! has_cmd kanata; then
         sudo curl -L https://github.com/jtroo/kanata/releases/latest/download/kanata \
             -o /usr/bin/kanata
         sudo chmod +x /usr/bin/kanata
