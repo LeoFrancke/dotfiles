@@ -147,14 +147,16 @@ mkdir -pv \
     "$HOME/.config/lsd" \
     "$HOME/.config/rmpc/themes" \
     "$HOME/.config/glow" \
-    if ! is_WSL; then
-        "$HOME/.config/kanata" \
-        "$HOME/.config/systemd/user" \
-    fi
     "$HOME/.config/btop"
 
-# symlink of main dotfiles
+if ! is_WSL; then
+    mkdir -pv \
+        "$HOME/.config/kanata" \
+        "$HOME/.config/systemd/user"
+fi
 
+
+## symlink of main dotfiles
 ln -sfn "$DOTFILES/shell/.zshrc"                ~/.zshrc
 ln -sfn "$DOTFILES/shell/.p10k.zsh"             ~/.p10k.zsh
 ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
@@ -167,21 +169,21 @@ ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
 ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
-# wezterm and kanata live outside WSL
+## wezterm and kanata live outside WSL
 if ! is_WSL; then
     ln -sfn "$DOTFILES/.wezterm.lua"                ~/.wezterm.lua
     ln -sfn "$DOTFILES/kanata/kanata.kbd"           ~/.config/kanata/kanata.kbd
 fi
 echo "Dotfiles linked!"
 
-# vim plug install, if not already installed
+## vim plug install, if not already installed
 [ ! -f ~/.vim/autoload/plug.vim ] && \
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 echo "Don't forget to install Vim Plugins
 Inside Vim: :PlugInstall"
 
-# symlink of vim files
+## symlink of vim files
 ln -sfn "$DOTFILES/vim/colors/modifications.vim"   ~/.vim/colors/modifications.vim
 ln -sfn "$DOTFILES/vim/config/mappings.vim"        ~/.vim/config/mappings.vim
 ln -sfn "$DOTFILES/vim/config/persistent_undo.vim" ~/.vim/config/persistent_undo.vim
