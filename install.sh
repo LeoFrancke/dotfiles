@@ -8,8 +8,9 @@ set -e # exit on error
 # 4. Kanata config and service
 
 # Helper functions
-is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
+function is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
 has_cmd() { command -v "$1" &>/dev/null; }
+
 
 # 1. --- File system structure ---
 mkdir -pv \
@@ -41,55 +42,57 @@ EOF
 
 
 # 2. --- Package and Plugins installation ---
+#
 ## 2.1 Package list
-#  shared across all environments
+#  Shared across all environments
 cli_packages=(
-    zsh neovim neovim vim git curl bat lsd ripgrep \
+    zsh neovim neovim gvim git curl bat lsd ripgrep fzf \
     tldr fastfetch glow btop xdg-user-dirs ttf-firacode-nerd
 )
 
-# wezterm imv
+# GUI-only packages
+gui_packages=(wezterm imv)
 
+## 2.2 Determine final target packages
+packages=("${cli_packages[@]}")
 
-
-
-# Determine the right package manager
-if has_cmd pacman; then
-    sudo pacman -S --needed wezterm zsh neovim gvim git curl bat lsd xdg-user-dirs fzf \
-        fastfetch imv glow tldr ripgrep btop #thefuck ttf-firacode-nerd
-
-    ### add a WSL check 
-    # remove: gui apps and kanata
-    #
-
-    # avoids error if yay not installed
-    if has_cmd yay; then
-        yay -S --needed kanata-bin
-    else
-        echo "yay not found! Install it manually, then run this script again."
-    fi
-
-# in case of Ubuntu
-elif has_cmd apt; then
-    sudo apt update && sudo apt install -y zsh neovim git curl bat lsd xdg-user-dirs fzf \
-        fastfetch tldr ripgrep btop #thefuck 
-    
-    # kanata install on ubuntu
-    if ! has_cmd kanata; then
-        sudo curl -L https://github.com/jtroo/kanata/releases/latest/download/kanata \
-            -o /usr/bin/kanata
-        sudo chmod +x /usr/bin/kanata
-    fi
-
-    # If using Ubuntu in a GUI
-    if [[ "$TERM" == "gui" ]]; then
-        sudo apt install -y wezterm gvim imv glow
-    else  # tty only
-        sudo apt install -y vim
-    fi
+if ! is_WSL; then
+  packages+=("${gui_packages[@]}")
 fi
 
-# update default user directories
+## 2.3 Package manager detection & execution
+# Arch Linux (pacman)
+if has_cmd pacman; then
+  echo "==> Installing packages via Pacman..."
+  sudo pacman -S --needed "${packages[@]}"
+
+  # Kanata (Only native Linux, via AUR)
+  if ! is_WSL; then
+    if has_cmd yay; then
+      yay -S --needed kanata-bin
+    else
+      echo "Warning: yay not found!
+      Install it manually and re-run this script to get kanata-bin."
+    fi
+  fi
+
+# Debian/Ubuntu (apt)
+elif has_cmd apt; then
+  echo "==> Updating and installing packages via APT..."
+  sudo apt update
+  sudo apt install -y "${packages[@]}"
+
+  # Kanata binary install (Only native Linux)
+  if ! is_WSL && ! has_cmd kanata; then
+    echo "==> Downloading Kanata binary..."
+    sudo curl -L https://github.com/jtroo/kanata/releases/latest/download/kanata \
+        -o /usr/local/bin/kanata
+    sudo chmod +x /usr/local/bin/kanata
+  fi
+fi
+
+
+# Update default user directories
 # this command needs to be after xdg-user-dirs installation
 xdg-user-dirs-update
 echo "File system ready."
@@ -147,15 +150,13 @@ mkdir -pv \
     "$HOME/.config/systemd/user" \
     "$HOME/.config/btop"
 
-
 # symlink of main dotfiles
-ln -sfn "$DOTFILES/.wezterm.lua"                ~/.wezterm.lua
+
 ln -sfn "$DOTFILES/shell/.zshrc"                ~/.zshrc
 ln -sfn "$DOTFILES/shell/.p10k.zsh"             ~/.p10k.zsh
 ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
 # ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.config/nvim/init.vim
 ln -sfn "$DOTFILES/.gitconfig"                  ~/.gitconfig
-ln -sfn "$DOTFILES/kanata/kanata.kbd"           ~/.config/kanata/kanata.kbd
 ln -sfn "$DOTFILES/ripgrep.conf"                ~/.config/ripgrep/ripgrep.conf
 ln -sfn "$DOTFILES/lsd/config.yaml"             ~/.config/lsd/config.yaml
 ln -sfn "$DOTFILES/lsd/icons.yaml"              ~/.config/lsd/icons.yaml
@@ -163,13 +164,19 @@ ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
 ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
+# wezterm and kanata live outside WSL
+if ! is_WSL; then
+    ln -sfn "$DOTFILES/.wezterm.lua"                ~/.wezterm.lua
+    ln -sfn "$DOTFILES/kanata/kanata.kbd"           ~/.config/kanata/kanata.kbd
+fi
 echo "Dotfiles linked!"
 
 # vim plug install, if not already installed
 [ ! -f ~/.vim/autoload/plug.vim ] && \
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-echo "Don't forget to install Vim Plugins, inside vim: :PlugInstall"
+echo "Don't forget to install Vim Plugins
+Inside Vim: :PlugInstall"
 
 # symlink of vim files
 ln -sfn "$DOTFILES/vim/colors/modifications.vim"   ~/.vim/colors/modifications.vim
@@ -181,7 +188,7 @@ ln -sfn "$DOTFILES/vim/spell/en.utf-8.add"         ~/.vim/spell/en.utf-8.add
 
 
 # 4. --- KANATA keyboard config and installation ---
-if command -v kanata &>/dev/null; then
+if has_cmd kanata; then
     # groups & udev
     sudo groupadd --system uinput 2>/dev/null || true  # returns True if group already exists
     sudo usermod -aG input,uinput "$USER"
