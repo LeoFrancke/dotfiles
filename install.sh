@@ -8,7 +8,7 @@ set -e # exit on error
 # 4. Kanata config and service
 
 # Helper functions
-function is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
+is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
 has_cmd() { command -v "$1" &>/dev/null; }
 
 
@@ -46,8 +46,8 @@ EOF
 ## 2.1 Package list
 #  Shared across all environments
 cli_packages=(
-    zsh neovim neovim gvim git curl bat lsd ripgrep fzf \
-    tldr fastfetch glow btop xdg-user-dirs ttf-firacode-nerd
+    zsh neovim vim git curl bat lsd ripgrep fzf \
+    tldr fastfetch glow btop xdg-user-dirs
 )
 
 # GUI-only packages
@@ -64,7 +64,8 @@ fi
 # Arch Linux (pacman)
 if has_cmd pacman; then
   echo "==> Installing packages via Pacman..."
-  sudo pacman -S --needed "${packages[@]}"
+  #ttf-firacode is pacman specific
+  sudo pacman -S --needed "${packages[@]}" ttf-firacode-nerd
 
   # Kanata (Only native Linux, via AUR)
   if ! is_WSL; then
@@ -142,12 +143,14 @@ mkdir -pv \
     "$HOME/.local/state" \
     "$HOME/.vim/colors" \
     "$HOME/.vim/spell" \
-    "$HOME/.config/kanata" \
     "$HOME/.config/ripgrep" \
     "$HOME/.config/lsd" \
     "$HOME/.config/rmpc/themes" \
     "$HOME/.config/glow" \
-    "$HOME/.config/systemd/user" \
+    if ! is_WSL; then
+        "$HOME/.config/kanata" \
+        "$HOME/.config/systemd/user" \
+    fi
     "$HOME/.config/btop"
 
 # symlink of main dotfiles
