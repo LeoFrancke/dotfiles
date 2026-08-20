@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e # exit on error
+DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 
 ######                    INSTRUCTIONS                       #####
 # Just run it with bash to get your tools and env up and running #
 
-DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 # Helper functions
 is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
 has_cmd() { command -v "$1" &>/dev/null; }
@@ -48,6 +48,7 @@ fi
 ## 1.3 Package manager detection & execution
 # Arch Linux (pacman)
 if has_cmd pacman; then
+  sudo pacman -Syyu
   echo "==> Installing packages via Pacman..."
   sudo pacman -S --needed "${packages[@]}" ttf-firacode-nerd #ttf-firacode is pacman specific
 
@@ -56,8 +57,8 @@ if has_cmd pacman; then
     if has_cmd yay; then
       yay -S --needed kanata-bin
     else
-      echo "Warning: yay not found!
-      Install it manually and re-run this script to get kanata-bin."
+      echo "Warning: yay not found!"
+      echo "Install it manually and re-run this script to get kanata-bin."
     fi
   fi
 
@@ -148,8 +149,8 @@ ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
 ## wezterm and kanata live outside WSL
 if ! is_WSL; then
-    ln -sfn "$DOTFILES/.wezterm.lua"                ~/.wezterm.lua
-    ln -sfn "$DOTFILES/kanata/kanata.kbd"           ~/.config/kanata/kanata.kbd
+    ln -sfn "$DOTFILES/.wezterm.lua"            ~/.wezterm.lua
+    ln -sfn "$DOTFILES/kanata/kanata.kbd"       ~/.config/kanata/kanata.kbd
 fi
 echo "Dotfiles linked!"
 
@@ -157,8 +158,8 @@ echo "Dotfiles linked!"
 if [ ! -f ~/.vim/autoload/plug.vim ]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    echo "Don't forget to install Vim Plugins
-    Inside Vim: :PlugInstall"
+    echo "Don't forget to install Vim Plugins"
+    echo "Inside Vim: :PlugInstall"
 fi
 
 ## Symlink of vim files
