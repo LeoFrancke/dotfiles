@@ -154,11 +154,12 @@ fi
 echo "Dotfiles linked!"
 
 ## Vim plug install, if not already installed
-[ ! -f ~/.vim/autoload/plug.vim ] && \
+if [ ! -f ~/.vim/autoload/plug.vim ]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     echo "Don't forget to install Vim Plugins
     Inside Vim: :PlugInstall"
+fi
 
 ## Symlink of vim files
 ln -sfn "$DOTFILES/vim/colors/modifications.vim"   ~/.vim/colors/modifications.vim
