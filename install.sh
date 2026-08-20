@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e # exit on error
 
+######                    INSTRUCTIONS                       #####
+# Just run it with bash to get your tools and env up and running #
+
 DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 # Helper functions
 is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
@@ -10,11 +13,11 @@ if ! has_cmd git; then
     exit 1
 fi
 
-# Script steps:
+## Script steps:
 # 0. Clone the repo
-# 1. Create the file system
-# 2. Install packages (pacman or apt) and plugins
-# 3. Dotfiles configuration
+# 1. Install packages (pacman or apt) and plugins
+# 2. Dotfiles configuration
+# 3. Create the file system
 # 4. Kanata config and service
 
 
@@ -25,37 +28,8 @@ if [ ! -d "$DOTFILES/.git" ]; then
 fi
 
 
-# 1. --- File system structure ---
-mkdir -pv \
-    "$HOME/20_foundations" \
-    "$HOME/30_personal/1_documents" \
-    "$HOME/30_personal/5_screenshots" \
-    "$HOME/30_personal/6_videos" \
-    "$HOME/30_personal/7_music" \
-    "$HOME/40_professional" \
-    "$HOME/50_resources/templates" \
-    "$HOME/90_archive" \
-    "$HOME/Desktop" \
-    "$HOME/Downloads"
-
-# XDG default directories
-# Single-quoting 'EOF' disables all expansion inside the heredoc.
-cat > "$HOME/.config/user-dirs.dirs" <<'EOF'
-XDG_DESKTOP_DIR="$HOME/Desktop"
-XDG_DOWNLOAD_DIR="$HOME/Downloads"
-XDG_DOCUMENTS_DIR="$HOME/30_personal/1_documents"
-XDG_PICTURES_DIR="$HOME/30_personal/5_screenshots"
-XDG_VIDEOS_DIR="$HOME/30_personal/6_videos"
-XDG_MUSIC_DIR="$HOME/30_personal/7_music"
-XDG_TEMPLATES_DIR="$HOME/50_resources/templates"
-XDG_PUBLICSHARE_DIR="$HOME"
-XDG_PROJECTS_DIR="$HOME/10_projects"
-EOF
-
-
-# 2. --- Package and Plugins installation ---
-#
-## 2.1 Package list
+# 1. --- Package and Plugins installation ---
+## 1.1 Package list
 #  Shared across all environments
 cli_packages=(
     zsh neovim vim curl bat lsd ripgrep fzf \
@@ -63,21 +37,19 @@ cli_packages=(
 )
 
 # GUI-only packages
-gui_packages=(wezterm imv)
+gui_packages=(wezterm firefox imv)
 
-## 2.2 Determine final target packages
+## 1.2 Determine final target packages
 packages=("${cli_packages[@]}")
-
 if ! is_WSL; then
   packages+=("${gui_packages[@]}")
 fi
 
-## 2.3 Package manager detection & execution
+## 1.3 Package manager detection & execution
 # Arch Linux (pacman)
 if has_cmd pacman; then
   echo "==> Installing packages via Pacman..."
-  #ttf-firacode is pacman specific
-  sudo pacman -S --needed "${packages[@]}" ttf-firacode-nerd
+  sudo pacman -S --needed "${packages[@]}" ttf-firacode-nerd #ttf-firacode is pacman specific
 
   # Kanata (Only native Linux, via AUR)
   if ! is_WSL; then
@@ -104,24 +76,19 @@ elif has_cmd apt; then
   fi
 fi
 
-
-# Update default user directories
-# this command needs to be after xdg-user-dirs installation
-xdg-user-dirs-update
-echo "File system ready."
-
-# Update shell to zsh
+## 1.4 Update shell to zsh
 if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
     chsh -s "$(which zsh)"
     echo "Your shell is now zsh."
 fi
 
+## 1.5 Zshell
 # --- Oh My Zsh ---
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-# --- Powerlevel10k ---
+# --- Powerlevel10k theme ---
 if [[ "$TERM" != "linux" ]] && [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
         "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" && \
@@ -147,7 +114,7 @@ ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
     echo "Installed: fast-syntax-highlighting"
 
 
-# 3. --- Dotfiles config ---
+# 2. --- Dotfiles config ---
 mkdir -pv \
     "$HOME/.config/nvim" \
     "$HOME/.vim/config" \
@@ -166,8 +133,7 @@ if ! is_WSL; then
         "$HOME/.config/systemd/user"
 fi
 
-
-## symlink of main dotfiles
+## Symlink of main dotfiles
 ln -sfn "$DOTFILES/shell/.zshrc"                ~/.zshrc
 ln -sfn "$DOTFILES/shell/.p10k.zsh"             ~/.p10k.zsh
 ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
@@ -187,20 +153,52 @@ if ! is_WSL; then
 fi
 echo "Dotfiles linked!"
 
-## vim plug install, if not already installed
+## Vim plug install, if not already installed
 [ ! -f ~/.vim/autoload/plug.vim ] && \
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-echo "Don't forget to install Vim Plugins
-Inside Vim: :PlugInstall"
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
+    echo "Don't forget to install Vim Plugins
+    Inside Vim: :PlugInstall"
 
-## symlink of vim files
+## Symlink of vim files
 ln -sfn "$DOTFILES/vim/colors/modifications.vim"   ~/.vim/colors/modifications.vim
 ln -sfn "$DOTFILES/vim/config/mappings.vim"        ~/.vim/config/mappings.vim
 ln -sfn "$DOTFILES/vim/config/persistent_undo.vim" ~/.vim/config/persistent_undo.vim
 ln -sfn "$DOTFILES/vim/config/plugins.vim"         ~/.vim/config/plugins.vim
 ln -sfn "$DOTFILES/vim/config/statusline.vim"      ~/.vim/config/statusline.vim
 ln -sfn "$DOTFILES/vim/spell/en.utf-8.add"         ~/.vim/spell/en.utf-8.add
+
+
+# 3. --- File system structure ---
+mkdir -pv \
+    "$HOME/20_foundations" \
+    "$HOME/30_personal/1_documents" \
+    "$HOME/30_personal/5_screenshots" \
+    "$HOME/30_personal/6_videos" \
+    "$HOME/30_personal/7_music" \
+    "$HOME/40_professional" \
+    "$HOME/50_resources/templates" \
+    "$HOME/90_archive" \
+    "$HOME/Desktop" \
+    "$HOME/Downloads"
+
+# XDG default directories
+# Single-quoting 'EOF' disables all expansion inside the heredoc.
+cat > "$HOME/.config/user-dirs.dirs" <<'EOF'
+XDG_DESKTOP_DIR="$HOME/Desktop"
+XDG_DOWNLOAD_DIR="$HOME/Downloads"
+XDG_DOCUMENTS_DIR="$HOME/30_personal/1_documents"
+XDG_PICTURES_DIR="$HOME/30_personal/5_screenshots"
+XDG_VIDEOS_DIR="$HOME/30_personal/6_videos"
+XDG_MUSIC_DIR="$HOME/30_personal/7_music"
+XDG_TEMPLATES_DIR="$HOME/50_resources/templates"
+XDG_PUBLICSHARE_DIR="$HOME"
+XDG_PROJECTS_DIR="$HOME/10_projects"
+EOF
+
+# Update default user directories
+xdg-user-dirs-update
+echo "File system ready."
 
 
 # 4. --- KANATA keyboard config and installation ---
@@ -221,4 +219,3 @@ if has_cmd kanata; then
     systemctl --user enable kanata
     echo "Kanata service enabled. Reboot needed."
 fi
-
