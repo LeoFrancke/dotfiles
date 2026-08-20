@@ -1,20 +1,32 @@
 #!/bin/bash
 set -e # exit on error
 
-# Steps:
-# 1. File system
-# 2. Install packages (pacman or apt) and plugins
-# 3. Dotfiles config
-# 4. Kanata config and service
-
+DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 # Helper functions
 is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
 has_cmd() { command -v "$1" &>/dev/null; }
+if ! has_cmd git; then
+    echo "Error. Install git manually to continue."
+    exit 1
+fi
+
+# Script steps:
+# 0. Clone the repo
+# 1. Create the file system
+# 2. Install packages (pacman or apt) and plugins
+# 3. Dotfiles configuration
+# 4. Kanata config and service
+
+
+# 0. --- Cloning the GitHub repo ---
+if [ ! -d "$DOTFILES/.git" ]; then
+    echo "==> Cloning dotfiles..."
+    git clone https://github.com/LeoFrancke/dotfiles.git "$DOTFILES"
+fi
 
 
 # 1. --- File system structure ---
 mkdir -pv \
-    "$HOME/10_projects/leofrancke" \
     "$HOME/20_foundations" \
     "$HOME/30_personal/1_documents" \
     "$HOME/30_personal/5_screenshots" \
@@ -46,8 +58,8 @@ EOF
 ## 2.1 Package list
 #  Shared across all environments
 cli_packages=(
-    zsh neovim vim git curl bat lsd ripgrep fzf \
-    tldr fastfetch glow btop xdg-user-dirs
+    zsh neovim vim curl bat lsd ripgrep fzf \
+    tldr fastfetch glow btop xdg-user-dirs #git
 )
 
 # GUI-only packages
@@ -136,7 +148,6 @@ ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
 
 # 3. --- Dotfiles config ---
-DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 mkdir -pv \
     "$HOME/.config/nvim" \
     "$HOME/.vim/config" \
