@@ -1,3 +1,5 @@
+function is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
+
 # --- Aliases and variables ---
 #
 # Go language path (different than default)
@@ -11,11 +13,16 @@ export EDITOR="vim"
 # basics:
 alias reload='source ~/.zshrc && echo "-> zsh config reloaded"'
 alias update='omz update; yay -Syu'      # experimental   # yt-dlp -U; 
+if is_WSL; then
+    alias shutdown='wsl.exe --shutdown'
+else
+    alias shutdown='shutdown -h now'
+fi
 # fzf search on manual pages
 alias fman='compgen -c | fzf --header "Search manual pages" | xargs man'
 
 # C++ new standard + warnings for building good habits
-alias g++='g++ -std=c++23 -Wall -Wextra -Wpedantic'
+alias g++='g++ -std=c++23 -Wall -Wextra -Wpedantic -O3'
 
 # Keyboard layout toggles -- only works at TTY
 alias dvorak='echo "sudo loadkeys dvorak"; sudo loadkeys dvorak && echo "tty keyboard: Dvorak layout"'

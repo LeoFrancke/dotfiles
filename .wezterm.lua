@@ -9,7 +9,7 @@ else
     primary_font = "Fira Code Nerd Font"
 end
 
--- If Windows, default to WSL
+-- If Windows, set default shell
 local default_prog = nil
 if is_windows then
     default_prog = { "powershell.exe", "-NoLogo" }
@@ -35,7 +35,7 @@ local config = {
     -- Style
     default_cursor_style = "BlinkingBlock",
     window_background_opacity = 0.91,
-    window_decorations = "RESIZE",
+    window_decorations = "NONE",
     font_size = 14.0,
     font = wezterm.font_with_fallback({
         { 
@@ -70,7 +70,7 @@ local config = {
     window_padding = {
         left = 8,
         right = 6,
-        top = 11,
+        top = 10,
         bottom = 5,
     },
 
