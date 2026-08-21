@@ -2,14 +2,15 @@
 set -e # exit on error
 DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 
-######                    INSTRUCTIONS                       #####
-# Just run it with bash to get your tools and env up and running #
+######             INSTRUCTIONS                #####
+# Just run the command below to get your env ready #
+# curl -fsSL https://raw.githubusercontent.com/LeoFrancke/dotfiles/main/install.sh | bash
 
 # Helper functions
 is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
 has_cmd() { command -v "$1" &>/dev/null; }
 if ! has_cmd git; then
-    echo "Error. Install git manually to continue."
+    echo "Error: git not installed"
     exit 1
 fi
 
@@ -32,8 +33,8 @@ fi
 ## 1.1 Package list
 #  Shared across all environments
 cli_packages=(
-    zsh neovim vim curl bat lsd ripgrep fzf \
-    tldr fastfetch glow btop xdg-user-dirs #git
+    zsh neovim vim bat lsd ripgrep fzf git-delta openssh \
+    tldr fastfetch glow btop xdg-user-dirs #git curl 
 )
 
 # GUI-only packages
@@ -48,9 +49,9 @@ fi
 ## 1.3 Package manager detection & execution
 # Arch Linux (pacman)
 if has_cmd pacman; then
-  sudo pacman -Syyu
+  sudo pacman -Syyu     # update first, otherwise any package may fail
   echo "==> Installing packages via Pacman..."
-  sudo pacman -S --needed "${packages[@]}" ttf-firacode-nerd #ttf-firacode is pacman specific
+  sudo pacman -S --needed "${packages[@]}" ttf-firacode-nerd  # this font is pacman specific
 
   # Kanata (Only native Linux, via AUR)
   if ! is_WSL; then
@@ -80,7 +81,7 @@ fi
 ## 1.4 Update shell to zsh
 if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
     chsh -s "$(which zsh)"
-    echo "Your shell is now zsh."
+    echo -e "Your shell is now zsh \n"
 fi
 
 ## 1.5 Zshell
@@ -147,19 +148,19 @@ ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
 ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
 ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
 ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
-## wezterm and kanata live outside WSL
-if ! is_WSL; then
+
+if ! is_WSL; then    ## wezterm + kanata run natively on Windows, not inside WSL
     ln -sfn "$DOTFILES/.wezterm.lua"            ~/.wezterm.lua
     ln -sfn "$DOTFILES/kanata/kanata.kbd"       ~/.config/kanata/kanata.kbd
 fi
-echo "Dotfiles linked!"
+echo -e "==> Dotfiles linked! \n"
 
 ## Vim plug install, if not already installed
 if [ ! -f ~/.vim/autoload/plug.vim ]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     echo "Don't forget to install Vim Plugins"
-    echo "Inside Vim: :PlugInstall"
+    echo -e "Inside Vim: :PlugInstall \n"
 fi
 
 ## Symlink of vim files
@@ -200,7 +201,7 @@ EOF
 
 # Update default user directories
 xdg-user-dirs-update
-echo "File system ready."
+echo "File system ready"
 
 
 # 4. --- KANATA keyboard config and installation ---
@@ -221,3 +222,4 @@ if has_cmd kanata; then
     systemctl --user enable kanata
     echo "Kanata service enabled. Reboot needed."
 fi
+
