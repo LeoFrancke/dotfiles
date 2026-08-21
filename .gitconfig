@@ -4,6 +4,14 @@
 [credential]
 	helper = store
 [core]
-	editor = nvim
+	editor = vim
+	pager = delta
 [init]
 	defaultBranch = main
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
+[merge]
+	conflictStyle = zdiff3
