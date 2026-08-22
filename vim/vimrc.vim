@@ -1,5 +1,6 @@
 " Leandro Francke's vimrc, 2026
 " To check for errors, type :messages
+set encoding=utf-8
 
 " Neovim quickfix
 set runtimepath+=~/.vim
