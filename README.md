@@ -12,13 +12,14 @@ It handles distro detection, TTY detection, idempotent plugin installations.
 
 ## TO-DO:
 Modern CLI tools replacements
-- [ ] (priority) start using Tmux
-- [ ] Vim -> Neovim
 - [x] btop
 - [x] grep -> ripgrep
 - [ ] find -> fd
-- [ ] diff -> delta
+- [x] diff -> delta
 - [ ] cd -> zoxide
+
+- [ ] (priority) start using Tmux
+- [ ] Vim -> Neovim
 
 - [ ] install.sh: pacman.conf; locale=en_US; GUI keyboard layout: dvorak;
 - [ ] reinstall ly-dm via pacman
