@@ -31,10 +31,11 @@ fi
 
 # 1. --- Package and Plugins installation ---
 ## 1.1 Package list
-#  Shared across all environments
+#  Shared across all environments.
+#  already installed: git curl
 cli_packages=(
-    zsh neovim vim bat lsd ripgrep fzf git-delta openssh \
-    tldr fastfetch glow btop xdg-user-dirs #git curl 
+    zsh neovim bat lsd ripgrep fzf git-delta openssh \
+    tldr fastfetch glow btop xdg-user-dirs 
 )
 
 # GUI-only packages
@@ -43,39 +44,42 @@ gui_packages=(wezterm firefox imv)
 ## 1.2 Determine final target packages
 packages=("${cli_packages[@]}")
 if ! is_WSL; then
-  packages+=("${gui_packages[@]}")
+    packages+=("${gui_packages[@]}")
+fi
+if ! has_cmd vim; then
+    packages+=("gvim")
 fi
 
 ## 1.3 Package manager detection & execution
 # Arch Linux (pacman)
 if has_cmd pacman; then
-  sudo pacman -Syyu     # update first, otherwise any package may fail
-  echo "==> Installing packages via Pacman..."
-  sudo pacman -S --needed "${packages[@]}" ttf-firacode-nerd  # this font is pacman specific
+    sudo pacman -Syyu     # update first, otherwise any package may fail
+    echo "==> Installing packages via Pacman..."
+    sudo pacman -S --needed "${packages[@]}" ttf-firacode-nerd  # pacman specific font
 
-  # Kanata (Only native Linux, via AUR)
-  if ! is_WSL; then
-    if has_cmd yay; then
-      yay -S --needed kanata-bin
-    else
-      echo "Warning: yay not found!"
-      echo "Install it manually and re-run this script to get kanata-bin."
+    # Kanata (Only native Linux, via AUR)
+    if ! is_WSL; then
+        if has_cmd yay; then
+            yay -S --needed kanata-bin
+        else
+            echo "Warning: yay not found!"
+            echo "Install it manually and re-run this script to get kanata-bin."
+        fi
     fi
-  fi
 
 # Debian/Ubuntu (apt)
 elif has_cmd apt; then
-  echo "==> Updating and installing packages via APT..."
-  sudo apt update
-  sudo apt install -y "${packages[@]}"
+    echo "==> Updating and installing packages via APT..."
+    sudo apt update
+    sudo apt install -y "${packages[@]}"
 
-  # Kanata binary install (Only native Linux)
-  if ! is_WSL && ! has_cmd kanata; then
-    echo "==> Downloading Kanata binary..."
-    sudo curl -L https://github.com/jtroo/kanata/releases/latest/download/kanata \
-        -o /usr/local/bin/kanata
-    sudo chmod +x /usr/local/bin/kanata
-  fi
+    # Kanata binary install (Only native Linux)
+    if ! is_WSL && ! has_cmd kanata; then
+        echo "==> Downloading Kanata binary..."
+        sudo curl -L https://github.com/jtroo/kanata/releases/latest/download/kanata \
+            -o /usr/local/bin/kanata
+        sudo chmod +x /usr/local/bin/kanata
+    fi
 fi
 
 ## 1.4 Update shell to zsh
