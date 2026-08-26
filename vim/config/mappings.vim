@@ -45,8 +45,17 @@ noremap ]]  ]]zMzvz.
 
 
 " --- Clipboard (system clipboard) ---
-nnoremap <leader>y "+y
-vnoremap <leader>y "+y
+" Portable yank to system clipboard
+if has('wsl') || !empty($WSL_DISTRO_NAME)
+    " WSL: Pipe visual selection straight to Windows clip.exe
+    nnoremap <leader>y :w !clip.exe<CR><CR>
+    vnoremap <leader>y :w !clip.exe<CR><CR>
+else
+    " Native Linux: Standard X11/Wayland clipboard register
+    nnoremap <leader>y "+y
+    vnoremap <leader>y "+y
+endif
+
 nnoremap <leader>p "+p
 vnoremap <leader>p "+p
 " Paste/Put before:
