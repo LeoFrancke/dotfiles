@@ -11,6 +11,12 @@ if &compatible
     set nocompatible
 endif
 
+" Avoids WSL noise
+if !has('nvim')
+    set t_RV=
+    set t_u7=
+endif
+
 " Enable filetype detection, with filetype-specific plugins and indentation.
 filetype plugin indent on    
 
