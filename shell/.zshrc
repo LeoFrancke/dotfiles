@@ -193,12 +193,12 @@ zsh_startup() {
 # Welcome message
 if [[ ! -f /tmp/daily_fortune ]]; then
     touch /tmp/daily_fortune
-    # fortune | lolcat -f
     echo " "
-    echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
-    echo " "
-    cat todo_today.md
-    echo "check: ~/10_projects/00_roadmap/current_week.md"
+    # if is_saturday: update and organize next week.
+    # echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
+    # echo "check: ~/10_projects/00_roadmap/current_week.md"
+    # echo " "
+    cat ~/Desktop/todo_today.md
     echo " "
 fi
 
