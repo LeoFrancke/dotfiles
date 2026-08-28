@@ -9,19 +9,20 @@ export P10K="$HOME/.p10k.zsh"
 export DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 
 # --- Terminal Detection ---
-if [[ "$TERM" == "linux" ]]; then
-    # 1. We are in a standard Linux TTY (getty)
-    # Use ultra-minimalist settings
-    export MY_ENV="tty"
-
-elif [[ -n "$WAYLAND_DISPLAY" ]]; then
-    # 2. GUI - p10k theme
+if [[ -n "$WAYLAND_DISPLAY" || -n "$DISPLAY" ]]; then
+    # 1. Linux GUI session (Wayland / X11)  ## p10k theme
     export MY_ENV="gui"
 
-elif [[  ]]; then
+elif [[ -n "$WSL_DISTRO_NAME" || -n "$WSL_INTEROP" ]]; then
+    # 2. WSL
     export MY_ENV="wsl"
+
+elif [[ "$TERM" == "linux" ]]; then
+    # 3. Standard Linux TTY (getty)  ## Use ultra-minimalist settings
+    export MY_ENV="tty"
+
 else
-    # 3. Everything else, including WSL (windows)
+    # 4. Everything else
     export MY_ENV="gui"
 fi
 
@@ -38,6 +39,11 @@ export ZSH="$HOME/.oh-my-zsh"
 # Theme
 if [[ "$MY_ENV" == "gui" ]]; then
     ZSH_THEME="powerlevel10k/powerlevel10k"
+
+elif [[ "$MY_ENV" == "wsl" ]]; then
+    ZSH_THEME="powerlevel10k/powerlevel10k"
+    echo "to change theme -> $ p10k configure"
+
 elif [[ "$MY_ENV" == "tty" ]]; then
     # TTY environment: 'ys' theme
     ZSH_THEME="ys"
@@ -193,27 +199,28 @@ zsh_startup() {
 
 
 # Welcome message: to-do list
-$TODO_FILE="~/Desktop/todo_today.md"
-$TMP_FLAG="/tmp/daily_todo_$(date +%Y-%m-%d)"
-if [[ ! -f "$TMP_FLAG" && ]]; then
+export TODO_LIST="$HOME/Desktop/todo_today.md"
+export TMP_FLAG="/tmp/daily_todo_$(date +%Y-%m-%d)"
+if [[ ! -f "$TMP_FLAG" ]]; then
     touch "$TMP_FLAG"
-    echo " "
+    echo ""
 
     # Saturday-only reminder (date +%u: 1=Mon, ..., 6=Sat, 7=Sun)
     if [[ "$(date +%u)" -eq 6 ]]; then
         echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
-        echo "📅 Happy Saturday! Take some time to plan next week."
+        echo "📅 Happy Saturday! Take some time to plan the next week."
         echo "check: ~/10_projects/00_roadmap/current_week.md"
         echo ""
     fi
 
-    if [[ -f "$TODO_FILE" ]]; then
+    if [[ -f "$TODO_LIST" ]]; then
         echo "=== Today's To-Do List ==="
-        cat "$TODO_FILE"
+        cat "$TODO_LIST"
     else 
-        echo "Your $TODO_FILE file is missing."
+        echo "Your $TODO_LIST file is missing."
     fi
-    echo " "
+
+    echo ""
 fi
 
 
