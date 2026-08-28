@@ -18,6 +18,8 @@ elif [[ -n "$WAYLAND_DISPLAY" ]]; then
     # 2. GUI - p10k theme
     export MY_ENV="gui"
 
+elif [[  ]]; then
+    export MY_ENV="wsl"
 else
     # 3. Everything else, including WSL (windows)
     export MY_ENV="gui"
@@ -123,14 +125,14 @@ source $ZSH/oh-my-zsh.sh
 source "$DOTFILES/shell/zsh_aliases"
 
 
-if [[ "$TERM" == "linux" ]]; then
+if [[ "$MY_ENV" == "tty" ]]; then
     # autocomplete on tty
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=yellow'
 fi
 
 # Highlight style
 FAST_HIGHLIGHT_STYLES[command]='fg=green,bold'
-# FAST_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
+FAST_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
 # FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
 
 # Remove bold from executable files / dirs are still bold.
@@ -190,15 +192,27 @@ zsh_startup() {
 }
 
 
-# Welcome message
-if [[ ! -f /tmp/daily_fortune ]]; then
-    touch /tmp/daily_fortune
+# Welcome message: to-do list
+$TODO_FILE="~/Desktop/todo_today.md"
+$TMP_FLAG="/tmp/daily_todo_$(date +%Y-%m-%d)"
+if [[ ! -f "$TMP_FLAG" && ]]; then
+    touch "$TMP_FLAG"
     echo " "
-    # if is_saturday: update and organize next week.
-    # echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
-    # echo "check: ~/10_projects/00_roadmap/current_week.md"
-    # echo " "
-    cat ~/Desktop/todo_today.md
+
+    # Saturday-only reminder (date +%u: 1=Mon, ..., 6=Sat, 7=Sun)
+    if [[ "$(date +%u)" -eq 6 ]]; then
+        echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
+        echo "📅 Happy Saturday! Take some time to plan next week."
+        echo "check: ~/10_projects/00_roadmap/current_week.md"
+        echo ""
+    fi
+
+    if [[ -f "$TODO_FILE" ]]; then
+        echo "=== Today's To-Do List ==="
+        cat "$TODO_FILE"
+    else 
+        echo "Your $TODO_FILE file is missing."
+    fi
     echo " "
 fi
 
