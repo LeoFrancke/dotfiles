@@ -10,7 +10,7 @@ export DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 
 # --- Terminal Detection ---
 if [[ -n "$WAYLAND_DISPLAY" || -n "$DISPLAY" ]]; then
-    # 1. Linux GUI session (Wayland / X11)  ## p10k theme
+    # 1. Linux GUI session (Wayland / X11)
     export MY_ENV="gui"
 
 elif [[ -n "$WSL_DISTRO_NAME" || -n "$WSL_INTEROP" ]]; then
@@ -18,7 +18,7 @@ elif [[ -n "$WSL_DISTRO_NAME" || -n "$WSL_INTEROP" ]]; then
     export MY_ENV="wsl"
 
 elif [[ "$TERM" == "linux" ]]; then
-    # 3. Standard Linux TTY (getty)  ## Use ultra-minimalist settings
+    # 3. Standard Linux TTY (getty)
     export MY_ENV="tty"
 
 else
@@ -207,8 +207,9 @@ if [[ ! -f "$TMP_FLAG" ]]; then
 
     # Saturday-only reminder (date +%u: 1=Mon, ..., 6=Sat, 7=Sun)
     if [[ "$(date +%u)" -eq 6 ]]; then
-        echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
+        # echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
         echo "📅 Happy Saturday! Take some time to plan the next week."
+        echo "Don't forget to update your system"
         echo "check: ~/10_projects/00_roadmap/current_week.md"
         echo ""
     fi
