@@ -10,7 +10,7 @@ DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
 has_cmd() { command -v "$1" &>/dev/null; }
 if ! has_cmd git; then
-    echo "Error: git not installed"
+    echo "Error: git not installed. Do it manually."
     exit 1
 fi
 
@@ -127,6 +127,7 @@ mkdir -pv \
     "$HOME/.local/state" \
     "$HOME/.vim/colors" \
     "$HOME/.vim/spell" \
+    "$HOME/.ssh" \
     "$HOME/.config/ripgrep" \
     "$HOME/.config/lsd" \
     "$HOME/.config/rmpc/themes" \
@@ -139,12 +140,17 @@ if ! is_WSL; then
         "$HOME/.config/systemd/user"
 fi
 
+# OpenSSH requires strict owner-only permissions (user=full access / group, others=none)
+chmod u=rwx,go=                                 "$HOME/.ssh"
+chmod u=rw,go=                                  "$DOTFILES/ssh/config"
+
 ## Symlink of main dotfiles
 ln -sfn "$DOTFILES/shell/.zshrc"                ~/.zshrc
 ln -sfn "$DOTFILES/shell/.p10k.zsh"             ~/.p10k.zsh
 ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
 # ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.config/nvim/init.vim
 ln -sfn "$DOTFILES/.gitconfig"                  ~/.gitconfig
+ln -sfn "$DOTFILES/ssh/config"                  ~/.ssh/config
 ln -sfn "$DOTFILES/ripgrep.conf"                ~/.config/ripgrep/ripgrep.conf
 ln -sfn "$DOTFILES/lsd/config.yaml"             ~/.config/lsd/config.yaml
 ln -sfn "$DOTFILES/lsd/icons.yaml"              ~/.config/lsd/icons.yaml

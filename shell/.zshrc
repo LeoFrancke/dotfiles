@@ -4,9 +4,16 @@ if [[ -n "$ZSH_DEBUGRC" ]]; then
 fi
 
 
-# default theme
+# --- Base Environment Variables ---
 export P10K="$HOME/.p10k.zsh"
 export DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
+export TODO_LIST="$HOME/Desktop/todo_today.md"
+export TMP_FLAG="/tmp/daily_todo_$(date +%Y-%m-%d)"
+
+# --- Start SSH Agent: keys are loaded on-demand via ~/.ssh/config ---
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)" > /dev/null
+fi
 
 # --- Terminal Detection ---
 if [[ -n "$WAYLAND_DISPLAY" || -n "$DISPLAY" ]]; then
@@ -22,9 +29,35 @@ elif [[ "$TERM" == "linux" ]]; then
     export MY_ENV="tty"
 
 else
-    # 4. Everything else
+    # 4. Fallback / Everything else
     export MY_ENV="gui"
 fi
+
+# --- TO DO List script ---
+if [[ ! -f "$TMP_FLAG" ]]; then
+    touch "$TMP_FLAG"
+    echo ""
+
+    # Saturday-only reminder (date +%u: 1=Mon, ..., 6=Sat, 7=Sun)
+    if [[ "$(date +%u)" -eq 6 ]]; then
+        # echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
+        echo "📅 Happy Saturday! Take some time to plan the next week."
+        echo "Don't forget to update your system"
+        echo "check: ~/10_projects/00_roadmap/current_week.md"
+        echo ""
+    fi
+
+    if [[ -f "$TODO_LIST" ]]; then
+        echo "=== Today's To-Do List ==="
+        cat "$TODO_LIST"
+    else 
+        echo "Your $TODO_LIST file is missing."
+    fi
+
+    echo ""
+fi
+
+
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -139,7 +172,7 @@ fi
 # Highlight style
 FAST_HIGHLIGHT_STYLES[command]='fg=green,bold'
 FAST_HIGHLIGHT_STYLES[builtin]='fg=green,bold'
-# FAST_HIGHLIGHT_STYLES[alias]='fg=green,bold'
+FAST_HIGHLIGHT_STYLES[alias]='fg=blue,bold'
 
 # Remove bold from executable files / dirs are still bold.
 LS_COLORS="${LS_COLORS}:ex=32"
@@ -196,34 +229,6 @@ zsh_startup() {
     echo "--- zsh startup time ---"
     time ZSH_DEBUGRC=1 zsh -i -c exit 2>&1 | head -33
 }
-
-
-# Welcome message: to-do list
-export TODO_LIST="$HOME/Desktop/todo_today.md"
-export TMP_FLAG="/tmp/daily_todo_$(date +%Y-%m-%d)"
-if [[ ! -f "$TMP_FLAG" ]]; then
-    touch "$TMP_FLAG"
-    echo ""
-
-    # Saturday-only reminder (date +%u: 1=Mon, ..., 6=Sat, 7=Sun)
-    if [[ "$(date +%u)" -eq 6 ]]; then
-        # echo " Pending updates: $(checkupdates 2>/dev/null | wc -l)"
-        echo "📅 Happy Saturday! Take some time to plan the next week."
-        echo "Don't forget to update your system"
-        echo "check: ~/10_projects/00_roadmap/current_week.md"
-        echo ""
-    fi
-
-    if [[ -f "$TODO_LIST" ]]; then
-        echo "=== Today's To-Do List ==="
-        cat "$TODO_LIST"
-    else 
-        echo "Your $TODO_LIST file is missing."
-    fi
-
-    echo ""
-fi
-
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 if [[ "$MY_ENV" != "tty" ]]; then
