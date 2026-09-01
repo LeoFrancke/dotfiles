@@ -1,10 +1,18 @@
 #!/bin/bash
-set -e # exit on error
+set -e   # exit on error
 DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 
 ######             INSTRUCTIONS                #####
 # Just run the command below to get your env ready #
 # curl -fsSL https://raw.githubusercontent.com/LeoFrancke/dotfiles/main/install.sh | bash
+
+## Script steps:
+# 0. Clone the repo
+# 1. Install packages (pacman or apt) and plugins
+# 2. Dotfiles configuration
+# 3. Create the file system
+# 4. Kanata config and service
+
 
 # Helper functions
 is_WSL() { grep -qi microsoft /proc/version &>/dev/null; }
@@ -13,13 +21,6 @@ if ! has_cmd git; then
     echo "Error: git not installed. Do it manually."
     exit 1
 fi
-
-## Script steps:
-# 0. Clone the repo
-# 1. Install packages (pacman or apt) and plugins
-# 2. Dotfiles configuration
-# 3. Create the file system
-# 4. Kanata config and service
 
 
 # 0. --- Cloning the GitHub repo ---
@@ -140,46 +141,46 @@ if ! is_WSL; then
         "$HOME/.config/systemd/user"
 fi
 
-# OpenSSH requires strict owner-only permissions (user=full access / group, others=none)
+# OpenSSH requires strict owner-only permissions (user=full access / group+others=none)
 chmod u=rwx,go=                                 "$HOME/.ssh"
 chmod u=rw,go=                                  "$DOTFILES/ssh/config"
 
 ## Symlink of main dotfiles
-ln -sfn "$DOTFILES/shell/.zshrc"                ~/.zshrc
-ln -sfn "$DOTFILES/shell/.p10k.zsh"             ~/.p10k.zsh
-ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.vimrc
-# ln -sfn "$DOTFILES/vim/vimrc.vim"               ~/.config/nvim/init.vim
-ln -sfn "$DOTFILES/.gitconfig"                  ~/.gitconfig
-ln -sfn "$DOTFILES/ssh/config"                  ~/.ssh/config
-ln -sfn "$DOTFILES/ripgrep.conf"                ~/.config/ripgrep/ripgrep.conf
-ln -sfn "$DOTFILES/lsd/config.yaml"             ~/.config/lsd/config.yaml
-ln -sfn "$DOTFILES/lsd/icons.yaml"              ~/.config/lsd/icons.yaml
-ln -sfn "$DOTFILES/rmpc/config.ron"             ~/.config/rmpc/config.ron
-ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   ~/.config/rmpc/themes/theme_catppuccin.ron
-ln -sfn "$DOTFILES/glow.yml"                    ~/.config/glow/glow.yml
-ln -sfn "$DOTFILES/btop.conf"                   ~/.config/btop/btop.conf
+ln -sfn "$DOTFILES/shell/.zshrc"                "$HOME/.zshrc"
+ln -sfn "$DOTFILES/shell/.p10k.zsh"             "$HOME/.p10k.zsh"
+ln -sfn "$DOTFILES/vim/vimrc.vim"               "$HOME/.vimrc"
+# ln -sfn "$DOTFILES/vim/vimrc.vim"               "$HOME/.config/nvim/init.vim"
+ln -sfn "$DOTFILES/.gitconfig"                  "$HOME/.gitconfig"
+ln -sfn "$DOTFILES/ssh/config"                  "$HOME/.ssh/config"
+ln -sfn "$DOTFILES/ripgrep.conf"                "$HOME/.config/ripgrep/ripgrep.conf"
+ln -sfn "$DOTFILES/lsd/config.yaml"             "$HOME/.config/lsd/config.yaml"
+ln -sfn "$DOTFILES/lsd/icons.yaml"              "$HOME/.config/lsd/icons.yaml"
+ln -sfn "$DOTFILES/rmpc/config.ron"             "$HOME/.config/rmpc/config.ron"
+ln -sfn "$DOTFILES/rmpc/theme_catppuccin.ron"   "$HOME/.config/rmpc/themes/theme_catppuccin.ron"
+ln -sfn "$DOTFILES/glow.yml"                    "$HOME/.config/glow/glow.yml"
+ln -sfn "$DOTFILES/btop.conf"                   "$HOME/.config/btop/btop.conf"
 
 if ! is_WSL; then    ## wezterm + kanata run natively on Windows, not inside WSL
-    ln -sfn "$DOTFILES/.wezterm.lua"            ~/.wezterm.lua
-    ln -sfn "$DOTFILES/kanata/kanata.kbd"       ~/.config/kanata/kanata.kbd
+    ln -sfn "$DOTFILES/.wezterm.lua"            "$HOME/.wezterm.lua"
+    ln -sfn "$DOTFILES/kanata/kanata.kbd"       "$HOME/.config/kanata/kanata.kbd"
 fi
 echo -e "==> Dotfiles linked! \n"
 
 ## Vim plug install, if not already installed
-if [ ! -f ~/.vim/autoload/plug.vim ]; then
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
+    curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     echo "Don't forget to install Vim Plugins"
     echo -e "Inside Vim: :PlugInstall \n"
 fi
 
 ## Symlink of vim files
-ln -sfn "$DOTFILES/vim/colors/modifications.vim"   ~/.vim/colors/modifications.vim
-ln -sfn "$DOTFILES/vim/config/mappings.vim"        ~/.vim/config/mappings.vim
-ln -sfn "$DOTFILES/vim/config/persistent_undo.vim" ~/.vim/config/persistent_undo.vim
-ln -sfn "$DOTFILES/vim/config/plugins.vim"         ~/.vim/config/plugins.vim
-ln -sfn "$DOTFILES/vim/config/statusline.vim"      ~/.vim/config/statusline.vim
-ln -sfn "$DOTFILES/vim/spell/en.utf-8.add"         ~/.vim/spell/en.utf-8.add
+ln -sfn "$DOTFILES/vim/colors/modifications.vim"   "$HOME/.vim/colors/modifications.vim"
+ln -sfn "$DOTFILES/vim/config/mappings.vim"        "$HOME/.vim/config/mappings.vim"
+ln -sfn "$DOTFILES/vim/config/persistent_undo.vim" "$HOME/.vim/config/persistent_undo.vim"
+ln -sfn "$DOTFILES/vim/config/plugins.vim"         "$HOME/.vim/config/plugins.vim"
+ln -sfn "$DOTFILES/vim/config/statusline.vim"      "$HOME/.vim/config/statusline.vim"
+ln -sfn "$DOTFILES/vim/spell/en.utf-8.add"         "$HOME/.vim/spell/en.utf-8.add"
 
 
 # 3. --- File system structure ---
