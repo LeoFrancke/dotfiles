@@ -9,10 +9,12 @@ export P10K="$HOME/.p10k.zsh"
 export DOTFILES="$HOME/10_projects/leofrancke/dotfiles"
 export TODO_LIST="$HOME/Desktop/todo_today.md"
 export TMP_FLAG="/tmp/daily_todo_$(date +%Y-%m-%d)"
+export SSH_AUTH_SOCK="XDG_RUNTIME_DIR/ssh-agent-custom.sock"  # single shared daemon
 
 # --- Start SSH Agent: keys are loaded on-demand via ~/.ssh/config ---
-if [ -z "$SSH_AUTH_SOCK" ]; then
-    eval "$(ssh-agent -s)" > /dev/null
+if [ ! -S "$SSH_AUTH_SOCK" ]; then
+    # Idempotency - Start only if socket doesn't exist
+    eval "$(ssh-agent -a "$SSH_AUTH_SOCK" -s)" > /dev/null
 fi
 
 # --- Terminal Detection ---
