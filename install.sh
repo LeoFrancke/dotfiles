@@ -35,7 +35,7 @@ fi
 #  Shared across all environments.
 #  already installed: git curl
 cli_packages=(
-    zsh neovim bat lsd ripgrep fzf git-delta openssh \
+    zsh neovim tmux bat lsd ripgrep fzf git-delta openssh \
     tldr fastfetch glow btop xdg-user-dirs 
 )
 
@@ -124,6 +124,7 @@ ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 # 2. --- Dotfiles config ---
 mkdir -pv \
     "$HOME/.config/nvim" \
+    "$HOME/.config/tmux" \
     "$HOME/.vim/config" \
     "$HOME/.local/state" \
     "$HOME/.vim/colors" \
@@ -150,6 +151,7 @@ ln -sfn "$DOTFILES/shell/.zshrc"                "$HOME/.zshrc"
 ln -sfn "$DOTFILES/shell/.p10k.zsh"             "$HOME/.p10k.zsh"
 ln -sfn "$DOTFILES/vim/vimrc.vim"               "$HOME/.vimrc"
 # ln -sfn "$DOTFILES/vim/vimrc.vim"               "$HOME/.config/nvim/init.vim"
+ln -sfn "$DOTFILES/tmux/tmux.conf"              "$HOME/.config/tmux/.tmux.conf"
 ln -sfn "$DOTFILES/.gitconfig"                  "$HOME/.gitconfig"
 ln -sfn "$DOTFILES/ssh/config"                  "$HOME/.ssh/config"
 ln -sfn "$DOTFILES/ripgrep.conf"                "$HOME/.config/ripgrep/ripgrep.conf"
